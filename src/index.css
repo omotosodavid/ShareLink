@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scroll-x-anime {
+  display: block;
+  transform-origin: 0%;
+  animation: scrollXAnimate 7s linear infinite;
+}
+@keyframes scrollXAnimate {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translatex(-110px);
+  }
+  100% {
+    transform: translateX(15px);
+  }
+}
