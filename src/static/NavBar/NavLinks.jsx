@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const NavLinks = () => {
+  const activeLink='bg-purple-100 text-purple-800'
+  const inActiveLink='bg-transparent text-gray-700'
   const Linknavs = [
     { name: "Links", icon: "bi bi-link-45deg", link: "/" },
     { name: "Profile Details", icon: "bi bi-person-circle", link: "/profile" },
@@ -10,13 +12,14 @@ const NavLinks = () => {
     <ul className="flex w-72 items-center justify-between">
       {Linknavs.map((nav, index) => (
         <li
-          className="text-gray-700 py-2 px-3 rounded-lg duration-500 hover:bg-purple-100 hover:text-purple-800 text-lg cursor-pointer "
+          className="text-lg"
           key={index}
         >
-          <Link className=" flex items-center gap-x-2" to={nav.link}>
+          <NavLink className={({ isActive }) =>
+    `flex items-center gap-x-2 hover:bg-purple-100 hover:text-purple-800 py-2 px-3 rounded-lg duration-500 ${isActive ? activeLink : inActiveLink}`} to={nav.link}>
             <i className={nav.icon}></i>
             <p className="font-medium">{nav.name}</p>
-          </Link>
+          </NavLink>
         </li>
       ))}
     </ul>

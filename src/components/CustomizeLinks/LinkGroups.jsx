@@ -4,31 +4,25 @@ import { collection, onSnapshot } from "firebase/firestore";
 import db from "../../partials/firebase";
 import NewLinks from "./newLink";
 const LinkGroups = ({ newlink, cancel }) => {
-  const [ogresult, setOGResult] = useState([]);
-  const [ogId, setOgId] = useState([]);
-  const [platform,setPlatform]=useState([])
+  const [ogResult, setOGResult] = useState([]);
+  const [ogId, setOGId] = useState([]);
   const { handlePushToSocials } = useFunctions();
   let SocialPlatforms = useMemo(() => [], []);
   useEffect(() => {
     onSnapshot(collection(db, "headScrape"), (snapshot) => {
       let data = snapshot.docs.map((doc) => doc.data());
-      let dataId = snapshot.docs.map((doc) => doc.id);
+      let id = snapshot.docs.map((doc) => doc.id);
+      setOGId(id);
       setOGResult(data);
-      setOgId(dataId);
     });
-    if(ogresult && SocialPlatforms && ogId){
-     handlePushToSocials(ogresult, SocialPlatforms, ogId)
-    }
-    else{
-      console.log('nope');
-    }
-  },[]);
-  
+
+    handlePushToSocials(ogResult, SocialPlatforms, ogId);
+  }, []);
 
   return (
     <ol className="grid place-content-stretch gap-y-5 mt-6">
       {SocialPlatforms.map((SocialPlatform, index) => {
-        let { title, id } = SocialPlatform;
+        let { title, id, url } = SocialPlatform;
         return (
           <li key={index} className="bg-gray-100 rounded-lg p-3">
             <section className="flex justify-between items-center">
@@ -63,7 +57,7 @@ const LinkGroups = ({ newlink, cancel }) => {
                     name="SocialLinks"
                     id="link"
                     placeholder="Type in your url"
-                    value=""
+                    value={url}
                     disabled
                     required
                   />

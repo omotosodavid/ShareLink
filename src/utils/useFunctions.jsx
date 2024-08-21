@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useImgContext } from "./useCustomContext";
 import { addDoc, collection } from "firebase/firestore";
@@ -6,6 +6,7 @@ import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
+  const [platforms, setPlatForms] = useState([]);
   const { setImg } = useImgContext();
 
   function Link(e) {
@@ -32,13 +33,14 @@ const useFunctions = () => {
         return;
       }
     });
-    handleDbId(dbIds);
+    handleDbId(datas, dbIds);
     return finalTitles;
   };
 
-  const handleDbId = (dbIds) => {
+  const handleDbId = (datas, dbIds) => {
     for (let idCount = 0; idCount < dbIds.length; idCount++) {
       finalTitles[idCount].id = dbIds[idCount];
+      finalTitles[idCount].url = datas[idCount].result.url;
     }
   };
 
@@ -46,6 +48,7 @@ const useFunctions = () => {
     handleWhichTitleIsNotEmpty(result, dbIds).forEach((finalTitle) => {
       socials.push(finalTitle);
     });
+    setPlatForms(socials);
   };
 
   // scrape meta-tags
@@ -53,15 +56,14 @@ const useFunctions = () => {
     e.preventDefault();
     let inputValue = input.current.value;
     axios({
-      url: "http://localhost:5000/scrape",
+      url: "http://localhost:4000/scrape",
       method: "post",
       data: {
         url: inputValue,
       },
     }).then(({ data }) => {
       data.url = inputValue;
-      console.log(data);
-      // handleSaveToDB(data);
+      handleSaveToDB(data);
     });
   };
 
@@ -84,6 +86,7 @@ const useFunctions = () => {
     link,
     UploadImage,
     scrapeMetaTags,
+    platforms,
     handlePushToSocials,
   };
 };

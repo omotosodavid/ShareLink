@@ -1,4 +1,10 @@
+// import { useEffect } from "react";
+import useFunctions from "../../utils/useFunctions";
+
 const PhoneLinks = () => {
+  const { platforms } = useFunctions();
+  console.log(platforms);
+
   const Links = [
     { name: "GitHub", color: "bg-black", icon: "bi bi-github" },
     { name: "Youtube", color: "bg-red-500", icon: "bi bi-youtube" },
