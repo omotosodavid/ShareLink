@@ -1,20 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Customizelinks from "../components/CustomizeLinks/CustomizeLinks";
 import ProfileDeatils from "../components/ProfileDeatils/ProfileDeatils";
-import Navbar from "../static/NavBar/Navbar";
-import Phonedisplay from "../components/PhoneDisplay/Phonedisplay";
+import Preview from "../components/Preview/preview";
 
 const Pages = () => {
   return (
     <Router>
-      <Navbar />
-      <section className="flex justify-between items-start">
-        <Phonedisplay />
         <Routes>
           <Route exact path="/" Component={Customizelinks} />
           <Route exact path="/profile" Component={ProfileDeatils} />
+          <Route exact path="/preview" Component={Preview} />
         </Routes>
-      </section>
     </Router>
   );
 };

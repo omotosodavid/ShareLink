@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useImgContext } from "./useCustomContext";
+import { useCustomContext } from "./useCustomContext";
 import { addDoc, collection } from "firebase/firestore";
 import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
-  const [platforms, setPlatForms] = useState([]);
-  const { setImg } = useImgContext();
+  const { setImg, setPlatForms } = useCustomContext();
 
   function Link(e) {
     setLink(e.target.value);
@@ -47,8 +46,8 @@ const useFunctions = () => {
   const handlePushToSocials = (result, socials, dbIds) => {
     handleWhichTitleIsNotEmpty(result, dbIds).forEach((finalTitle) => {
       socials.push(finalTitle);
+      setPlatForms(socials);
     });
-    setPlatForms(socials);
   };
 
   // scrape meta-tags
@@ -63,7 +62,9 @@ const useFunctions = () => {
       },
     }).then(({ data }) => {
       data.url = inputValue;
-      handleSaveToDB(data);
+      // handleSaveToDB(data);
+      console.log(data);
+      
     });
   };
 
@@ -81,13 +82,37 @@ const useFunctions = () => {
     }
   };
 
+  function getRandomColor() {
+    // Define possible colors and shade ranges (excluding white).
+    const colors = [
+      "red",
+      "orange",
+      "yellow",
+      "green",
+      "teal",
+      "blue",
+      "indigo",
+      "purple",
+      "pink",
+      "gray",
+    ];
+    const shades = [500, 600, 700, 800]; // Commonly used shades in Tailwind.
+
+    // Randomly pick a color and shade.
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomShade = shades[Math.floor(Math.random() * shades.length)];
+
+    // Construct and return the Tailwind color class.
+    return `bg-${randomColor}-${randomShade}`;
+  }
+
   return {
     Link,
     link,
     UploadImage,
     scrapeMetaTags,
-    platforms,
     handlePushToSocials,
+    getRandomColor,
   };
 };
 export default useFunctions;
