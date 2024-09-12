@@ -1,17 +1,19 @@
 import { createContext, useContext, useState } from "react";
 
-const ImgContext = createContext();
+const CustomContext = createContext();
 
-export const useImgContext = () => {
-  return useContext(ImgContext);
+export const useCustomContext = () => {
+  return useContext(CustomContext);
 };
 
-export const ImgProvider = ({ children }) => {
+export const CustomProvider = ({ children }) => {
   const [img, setImg] = useState("");
+  const [platforms, setPlatForms] = useState([]);
+  const [alert, setAlert] = useState(false);
 
   return (
-    <ImgContext.Provider value={{ img, setImg }}>
+    <CustomContext.Provider value={{ img, setImg, platforms, setPlatForms,alert,setAlert }}>
       {children}
-    </ImgContext.Provider>
+    </CustomContext.Provider>
   );
 };

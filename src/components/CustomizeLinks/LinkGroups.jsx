@@ -8,16 +8,24 @@ const LinkGroups = ({ newlink, cancel }) => {
   const [ogId, setOGId] = useState([]);
   const { handlePushToSocials } = useFunctions();
   let SocialPlatforms = useMemo(() => [], []);
-  useEffect(() => {
-    onSnapshot(collection(db, "headScrape"), (snapshot) => {
-      let data = snapshot.docs.map((doc) => doc.data());
-      let id = snapshot.docs.map((doc) => doc.id);
+  let pushSocial = useMemo(() => handlePushToSocials, [handlePushToSocials]);
+ 
+useEffect(() => {
+  onSnapshot(collection(db, "headScrape"), (snapshot) => {
+    let data = snapshot.docs.map((doc) => doc.data());
+    let id = snapshot.docs.map((doc) => doc.id);
       setOGId(id);
       setOGResult(data);
-    });
+  });
 
-    handlePushToSocials(ogResult, SocialPlatforms, ogId);
-  }, []);
+  // Run pushSocial only when ogResult, SocialPlatforms, and ogId are populated and stable
+  if (ogResult.length > 0 && SocialPlatforms.length === 0 && ogId.length > 0) {
+    pushSocial(ogResult, SocialPlatforms, ogId);
+  }
+
+
+}, [pushSocial, ogResult, ogId,SocialPlatforms]);
+
 
   return (
     <ol className="grid place-content-stretch gap-y-5 mt-6">
@@ -52,7 +60,7 @@ const LinkGroups = ({ newlink, cancel }) => {
                 <section className="relative">
                   <i className="bi bi-link-45deg absolute text-2xl top-3 left-2"></i>
                   <input
-                    className="disabled:bg-gray-200 w-full p-3 rounded-lg pl-10"
+                    className="disabled:bg-white/70 w-full p-3 rounded-lg pl-10"
                     type="text"
                     name="SocialLinks"
                     id="link"

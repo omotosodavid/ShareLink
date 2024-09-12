@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useImgContext } from "./useCustomContext";
+import { useCustomContext } from "./useCustomContext";
 import { doc, setDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 const UseInput = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  let { img } = useImgContext();
+  const {setAlert}=useCustomContext()
+  let { img } = useCustomContext();
 
   const handleInfoChange = async (e) => {
     e.preventDefault();
@@ -34,11 +35,52 @@ const UseInput = () => {
     setEmail(e.target.value);
   }
 
+  const shareLink = (platform, text = "", hashtags = "") => {
+    const encodedUrl = encodeURIComponent(window.location.href);
+    const encodedText = encodeURIComponent(text);
+    const encodedHashtags = encodeURIComponent(hashtags);
+
+    const shareUrl =
+      platform === "facebook"
+        ? `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+        : platform === "twitter"
+        ? `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}&hashtags=${encodedHashtags}`
+        : platform === "linkedin"
+        ? `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+        : platform === "whatsapp"
+        ? `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`
+        : (console.error("Unsupported platform:", platform), "");
+
+    // Open the share URL in a new window
+    window.open(shareUrl, "_blank");
+  };
+
+  function copyUrlToClipboard() {
+    // Get the current URL from window.location.href
+    const currentUrl = window.location.href;
+
+    // Use the modern Clipboard API to copy the URL
+    navigator.clipboard
+      .writeText(currentUrl)
+      .then(() => {
+       setAlert(true)
+       setTimeout(()=>{
+        setAlert(false)
+       },3000)
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  }
+
   return {
     handleInfoChange,
     storeEmail,
     storeFirstName,
     storeLastName,
+    shareLink,
+    copyUrlToClipboard,
+    alert,
   };
 };
 
