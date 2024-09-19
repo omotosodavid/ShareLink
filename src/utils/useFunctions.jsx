@@ -6,7 +6,7 @@ import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
-  const { setImg, setPlatForms } = useCustomContext();
+  const { setImg } = useCustomContext();
 
   function Link(e) {
     setLink(e.target.value);
@@ -18,35 +18,10 @@ const useFunctions = () => {
     await addDoc(collectionRef, payload);
   };
 
-  let finalTitles = [];
-  const handleWhichTitleIsNotEmpty = (datas, dbIds) => {
+  const handlePushToSocials = (datas,socials) => {
     datas.forEach((data) => {
-      let { title, title1, title2 } = data.result;
-      if (title !== "") {
-        finalTitles.push({ title: title });
-      } else if (title1 !== "") {
-        finalTitles.push({ title: title1 });
-      } else if (title2 !== "") {
-        finalTitles.push({ title: title2 });
-      } else {
-        return;
-      }
-    });
-    handleDbId(datas, dbIds);
-    return finalTitles;
-  };
-
-  const handleDbId = (datas, dbIds) => {
-    for (let idCount = 0; idCount < dbIds.length; idCount++) {
-      finalTitles[idCount].id = dbIds[idCount];
-      finalTitles[idCount].url = datas[idCount].result.url;
-    }
-  };
-
-  const handlePushToSocials = (result, socials, dbIds) => {
-    handleWhichTitleIsNotEmpty(result, dbIds).forEach((finalTitle) => {
-      socials.push(finalTitle);
-      setPlatForms(socials);
+      let result = data.result;
+      socials.push(result);
     });
   };
 
@@ -54,18 +29,17 @@ const useFunctions = () => {
   const scrapeMetaTags = (e, input) => {
     e.preventDefault();
     let inputValue = input.current.value;
-    axios({
-      url: "http://localhost:4000/scrape",
-      method: "post",
-      data: {
-        url: inputValue,
-      },
-    }).then(({ data }) => {
-      data.url = inputValue;
-      // handleSaveToDB(data);
-      console.log(data);
-      
-    });
+
+    axios
+      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
+      .then((response) => {
+        const { title, icon, url } = response.data;
+        let data = { title, icon, url };
+        handleSaveToDB(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
 
   const UploadImage = (e, img) => {

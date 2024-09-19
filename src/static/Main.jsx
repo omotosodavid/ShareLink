@@ -4,7 +4,7 @@ import { CustomProvider } from "../utils/useCustomContext";
 
 const Main = () => {
   return (
-    <main className="w-[75em] mx-auto py-6">
+    <main className="w-[75em] mx-auto">
       <CustomProvider>
         <Pages />
       </CustomProvider>

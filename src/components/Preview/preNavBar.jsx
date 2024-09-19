@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 import ShareLinkButtons from "./shareLinkButtons";
 const PreviewNavbar = () => {
   return (
-    <section className="w-full h-72 bg-purple-700 absolute top-0 left-0 rounded-b-[7em]">
-      <header className="w-[75em] mx-auto bg-white p-6 py-4 rounded-xl mt-5">
+    <section className="w-full h-72 pt-5 px-8 bg-purple-700 rounded-b-[7em]">
+      <header className="mx-auto bg-white p-6 py-4 rounded-xl">
         <ul className="flex justify-between items-center">
           <li>
             <NavLink

@@ -1,16 +1,27 @@
-import { useCustomContext } from "../../utils/useCustomContext";
+import { useEffect, useState } from "react";
 import useFunctions from "../../utils/useFunctions";
 import { Link } from "react-router-dom";
+import { collection, onSnapshot } from "firebase/firestore";
+import db from "../../partials/firebase";
 
 const PhoneLinks = () => {
-  const { platforms } = useCustomContext();
+  const [platforms, setPlatforms] = useState([]);
   const { getRandomColor } = useFunctions();
   const Links = [];
+
+  useEffect(() => {
+    onSnapshot(collection(db, "headScrape"), (snapshot) => {
+      let data = snapshot.docs.map((doc) => doc.data().result);
+      setPlatforms(data);
+    });
+  }, []);
+
   const pushLinks = () => {
     platforms.forEach((platform) => {
       Links.push({
         name: platform.title,
         url: platform.url,
+        icon: platform.icon,
         color: getRandomColor(),
       });
     });
@@ -26,9 +37,11 @@ const PhoneLinks = () => {
             target="_blank"
             className={`flex items-center justify-between p-3 py-4 ${link.color} hover:${link.color}/80 rounded-lg group`}
           >
-            <section className="flex items-center gap-x-3 text-lg text-white font-medium">
-              {/* <i className={link.icon}></i> */}
-              <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[160px]">{link.name}</p>
+            <section className="flex items-center gap-x-2 text-lg text-white font-medium">
+              <img className="w-6 h-6 rounded-full object-cover" src={link.icon} alt={`${link.name} icon`} />
+              <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[160px]">
+                {link.name}
+              </p>
             </section>
             <section>
               <i className="bi bi-arrow-right-short text-white text-2xl group-hover:pr-2 duration-200"></i>

@@ -1,24 +1,52 @@
 import { useState } from "react";
 import { useCustomContext } from "./useCustomContext";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc,deleteDoc} from "firebase/firestore";
 import db from "../partials/firebase";
 const UseInput = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const {setAlert}=useCustomContext()
+  const { setAlert } = useCustomContext();
   let { img } = useCustomContext();
 
   const handleInfoChange = async (e) => {
     e.preventDefault();
     const docRef = doc(db, "userinfo", "abDPHpjMDBHQMfPLt5H6");
-    if (img === "") {
-      img =
-        "https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw";
+    try {
+      if (img === "") {
+        img =
+          "https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw";
+      }
+      const payload = { firstname, lastname, email, img };
+      await setDoc(docRef, payload);
+    } catch (err) {
+      console.error("Error changing info", err);
     }
-    const payload = { firstname, lastname, email, img };
-    await setDoc(docRef, payload);
   };
+  
+  const handleEditData=(disabledInput,saveButton)=>{
+    disabledInput.current.disabled=false
+    disabledInput.current.focus()
+    saveButton.current.classList.remove("hidden")
+    
+  }
+
+  const handleDeleteData = async (docId,index) => {
+    try {
+      // Get exact id
+      let id=docId[index]   
+
+      // Get a reference to the document
+      const docRef = doc(db,"headScrape", id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+    }
+  };
+
+  const handleSaveEdit=async()=>{
+    
+  }
 
   //  function for firstName
   function storeFirstName(e) {
@@ -63,10 +91,10 @@ const UseInput = () => {
     navigator.clipboard
       .writeText(currentUrl)
       .then(() => {
-       setAlert(true)
-       setTimeout(()=>{
-        setAlert(false)
-       },3000)
+        setAlert(true);
+        setTimeout(() => {
+          setAlert(false);
+        }, 3000);
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
@@ -75,6 +103,8 @@ const UseInput = () => {
 
   return {
     handleInfoChange,
+    handleEditData,
+    handleDeleteData,
     storeEmail,
     storeFirstName,
     storeLastName,
