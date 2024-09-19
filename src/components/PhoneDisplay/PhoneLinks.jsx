@@ -11,17 +11,19 @@ const PhoneLinks = () => {
 
   useEffect(() => {
     onSnapshot(collection(db, "headScrape"), (snapshot) => {
-      let data = snapshot.docs.map((doc) => doc.data().result);
-      setPlatforms(data);
+      let data = snapshot.docs.map((doc) => doc.data());
+      setPlatforms(data)
     });
   }, []);
 
   const pushLinks = () => {
     platforms.forEach((platform) => {
+    let newPlatform
+   !platform.result?newPlatform=platform:newPlatform=platform.result
       Links.push({
-        name: platform.title,
-        url: platform.url,
-        icon: platform.icon,
+        name: newPlatform.title,
+        url: newPlatform.url,
+        icon: newPlatform.icon,
         color: getRandomColor(),
       });
     });
@@ -38,7 +40,11 @@ const PhoneLinks = () => {
             className={`flex items-center justify-between p-3 py-4 ${link.color} hover:${link.color}/80 rounded-lg group`}
           >
             <section className="flex items-center gap-x-2 text-lg text-white font-medium">
-              <img className="w-6 h-6 rounded-full object-cover" src={link.icon} alt={`${link.name} icon`} />
+              <img
+                className="w-6 h-6 rounded-full object-cover"
+                src={link.icon}
+                alt={`${link.name} icon`}
+              />
               <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[160px]">
                 {link.name}
               </p>
