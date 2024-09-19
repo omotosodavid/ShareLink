@@ -8,11 +8,10 @@ export const useCustomContext = () => {
 
 export const CustomProvider = ({ children }) => {
   const [img, setImg] = useState("");
-  const [platforms, setPlatForms] = useState([]);
   const [alert, setAlert] = useState(false);
 
   return (
-    <CustomContext.Provider value={{ img, setImg, platforms, setPlatForms,alert,setAlert }}>
+    <CustomContext.Provider value={{ img, setImg,alert,setAlert }}>
       {children}
     </CustomContext.Provider>
   );
