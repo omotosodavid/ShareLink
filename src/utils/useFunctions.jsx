@@ -18,15 +18,16 @@ const useFunctions = () => {
     await addDoc(collectionRef, payload);
   };
 
-  const handlePushToSocials = (datas,socials) => {
+  const handlePushToSocials = (datas, socials) => {
     datas.forEach((data) => {
-      let result = data.result;
+      let result
+     !data.result?result=data : result = data.result;
       socials.push(result);
     });
   };
 
   // scrape meta-tags
-  const scrapeMetaTags = (e, input) => {
+  const scrapeMetaTags = async (e, input) => {
     e.preventDefault();
     let inputValue = input.current.value;
 

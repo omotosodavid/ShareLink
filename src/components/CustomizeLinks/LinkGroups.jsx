@@ -8,11 +8,12 @@ import UseInput from "../../utils/useInput";
 const LinkGroups = ({ newlink, cancel }) => {
   const [ogResult, setOGResult] = useState([]);
   const [ogId, setOGId] = useState([]);
-  const [SocialPlatforms, setSocialPlatforms] = useState([]); // Use useState for SocialPlatforms
-  const { handlePushToSocials } = useFunctions();
-  const { handleEditData, handleDeleteData } = UseInput();
-  const inputDisable = useRef();
-  const saveButton = useRef();
+  const [SocialPlatforms, setSocialPlatforms] = useState([]);
+  const { handlePushToSocials, Link, link } = useFunctions();
+  const { handleEditData, handleDeleteData, scrapeEditedMetaTags } = UseInput();
+  const inputDisableRefs = useRef({});
+  const saveButtonRefs = useRef({});
+
   useEffect(() => {
     onSnapshot(collection(db, "headScrape"), (snapshot) => {
       let data = snapshot.docs.map((doc) => doc.data());
@@ -26,9 +27,8 @@ const LinkGroups = ({ newlink, cancel }) => {
       if (JSON.stringify(SocialPlatforms) !== JSON.stringify(social)) {
         setSocialPlatforms(social);
       }
-      
     }
-  }, [ogResult, handlePushToSocials,SocialPlatforms]);
+  }, [ogResult, handlePushToSocials, SocialPlatforms]);
 
   return (
     <ol className="grid place-content-stretch gap-y-5 mt-6">
@@ -44,13 +44,18 @@ const LinkGroups = ({ newlink, cancel }) => {
               <section className="flex gap-x-4 items-center text-gray-400 text-lg font-medium">
                 <button
                   className="hover:text-gray-700"
-                  onClick={() => handleDeleteData(ogId,index)}
+                  onClick={() => handleDeleteData(ogId, index)}
                 >
                   Remove
                 </button>
                 <button
                   className="hover:text-gray-700"
-                  onClick={() => handleEditData(inputDisable, saveButton)}
+                  onClick={() =>
+                    handleEditData(
+                      inputDisableRefs.current[index],
+                      saveButtonRefs.current[index]
+                    )
+                  }
                 >
                   Edit
                 </button>
@@ -58,17 +63,28 @@ const LinkGroups = ({ newlink, cancel }) => {
             </section>
             <section className="grid gap-y-6 mt-6">
               <section className="grid gap-y-2 text-gray-600 text-lg font-medium">
-                <label htmlFor="social-platform">Platform</label>
+                <label htmlFor={`Social platform${index}`}>Platform</label>
                 <select
                   className="w-full p-3 rounded-lg"
-                  name="Social platform"
-                  id="social-platform"
+                  name="social-platform"
+                  id={`Social platform${index}`}
                   disabled
                 >
                   <option value={title}>{title}</option>
                 </select>
               </section>
-              <form className="grid gap-y-2 text-gray-600 text-lg font-medium">
+              <form
+                className="grid gap-y-2 text-gray-600 text-lg font-medium"
+                onSubmit={(e) =>
+                  scrapeEditedMetaTags(
+                    e,
+                    inputDisableRefs.current[index],
+                    ogId,
+                    index,
+                    saveButtonRefs.current[index]
+                  )
+                }
+              >
                 <label htmlFor="links">URL</label>
                 <section className="relative">
                   <i className="bi bi-link-45deg absolute text-2xl top-3 left-2"></i>
@@ -77,9 +93,10 @@ const LinkGroups = ({ newlink, cancel }) => {
                     type="text"
                     name="SocialLinks"
                     id="links"
-                    ref={inputDisable}
+                    ref={(el) => (inputDisableRefs.current[index] = el)}
                     placeholder="Type in your url"
-                    value={url}
+                    value={link||url}
+                    onChange={(e) => Link(e)}
                     disabled
                     required
                   />
@@ -87,7 +104,7 @@ const LinkGroups = ({ newlink, cancel }) => {
                 <button
                   className="hidden py-2 px-6 bg-purple-500 text-white rounded-md w-24 mt-6 hover:bg-purple-400"
                   type="submit"
-                  ref={saveButton}
+                  ref={(el) => (saveButtonRefs.current[index] = el)}
                 >
                   Save
                 </button>

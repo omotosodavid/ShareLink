@@ -1,6 +1,7 @@
 import { useState } from "react";
+import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { doc, setDoc,deleteDoc} from "firebase/firestore";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 const UseInput = () => {
   const [firstname, setFirstname] = useState("");
@@ -23,30 +24,55 @@ const UseInput = () => {
       console.error("Error changing info", err);
     }
   };
-  
-  const handleEditData=(disabledInput,saveButton)=>{
-    disabledInput.current.disabled=false
-    disabledInput.current.focus()
-    saveButton.current.classList.remove("hidden")
-    
-  }
 
-  const handleDeleteData = async (docId,index) => {
+  const handleEditData = (disabledInput, saveButton) => {
+    disabledInput.disabled = false;
+    disabledInput.focus();
+    saveButton.classList.remove("hidden");
+  };
+
+  const handleDeleteData = async (docId, index) => {
     try {
       // Get exact id
-      let id=docId[index]   
+      let id = docId[index];
 
       // Get a reference to the document
-      const docRef = doc(db,"headScrape", id);
+      const docRef = doc(db, "headScrape", id);
       await deleteDoc(docRef);
     } catch (error) {
       console.error("Error deleting document: ", error);
     }
   };
 
-  const handleSaveEdit=async()=>{
-    
-  }
+  const handleSaveEdit = async (docId, index, payload) => {
+    try {
+      // Get exact id
+      let id = docId[index];
+
+      const docRef = doc(db, "headScrape", id);
+      await setDoc(docRef, payload);
+    } catch (error) {
+      console.error("Error editing data", error);
+    }
+  };
+  const scrapeEditedMetaTags = async (e, input, docId, index,save) => {
+    e.preventDefault();
+    let inputValue = input.value;
+
+    // reset input and save button
+    input.disabled=true
+    save.classList.add("hidden");
+    axios
+      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
+      .then((response) => {
+        const { title, icon, url } = response.data;
+        let payload = { title, icon, url };
+        handleSaveEdit(docId, index, payload);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
 
   //  function for firstName
   function storeFirstName(e) {
@@ -105,6 +131,7 @@ const UseInput = () => {
     handleInfoChange,
     handleEditData,
     handleDeleteData,
+    scrapeEditedMetaTags,
     storeEmail,
     storeFirstName,
     storeLastName,
