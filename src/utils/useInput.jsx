@@ -3,12 +3,13 @@ import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import db from "../partials/firebase";
+import useFunctions from "./useFunctions";
 const UseInput = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const { setAlert } = useCustomContext();
-  let { img } = useCustomContext();
+  const { triggerAlert } = useFunctions();
+  let { setAlert, img, setAction } = useCustomContext();
 
   const handleInfoChange = async (e) => {
     e.preventDefault();
@@ -39,8 +40,9 @@ const UseInput = () => {
       // Get a reference to the document
       const docRef = doc(db, "headScrape", id);
       await deleteDoc(docRef);
-    } catch (error) {
-      console.error("Error deleting document: ", error);
+      triggerAlert("Link has been deleted", "bi-trash", "bg-red-500");
+    } catch {
+      triggerAlert("Error deleting link", "bi-x-lg", "bg-red-500");
     }
   };
 
@@ -51,23 +53,31 @@ const UseInput = () => {
 
       const docRef = doc(db, "headScrape", id);
       await setDoc(docRef, payload);
-    } catch (error) {
-      console.error("Error editing data", error);
+      triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
+    } catch {
+      triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
     }
   };
-  const scrapeEditedMetaTags = async (e, input, docId, index,save) => {
+  const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
     e.preventDefault();
+    // Intialize an action message
+    setAction("Editing");
+
     let inputValue = input.value;
 
     // reset input and save button
-    input.disabled=true
+    input.disabled = true;
     save.classList.add("hidden");
     axios
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
-        const { title, icon, url } = response.data;
+        let { title, icon, url } = response.data;
+        // check if icon is a valid src if not convert it to a valid one
+        icon = !icon.includes("//" || "https") ? `${url}${icon}` : icon;
         let payload = { title, icon, url };
+        
         handleSaveEdit(docId, index, payload);
+        setAction(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

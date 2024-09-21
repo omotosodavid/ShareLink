@@ -6,12 +6,23 @@ import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
-  const { setImg } = useCustomContext();
+  const { setImg, setAction,setAlert } = useCustomContext();
 
   function Link(e) {
     setLink(e.target.value);
   }
 
+  const pushLinks = (platforms, Links) => {
+    platforms.forEach((platform) => {
+      platform = !platform.result ? platform : platform.result;
+      Links.push({
+        name: platform.title,
+        url: platform.url,
+        icon: platform.icon,
+        color: getRandomColor(),
+      });
+    });
+  };
   const handleSaveToDB = async (result) => {
     const collectionRef = collection(db, "headScrape");
     const payload = { result };
@@ -20,26 +31,45 @@ const useFunctions = () => {
 
   const handlePushToSocials = (datas, socials) => {
     datas.forEach((data) => {
-      let result
-     !data.result?result=data : result = data.result;
+      let result = !data.result ? data : data.result;
       socials.push(result);
     });
+  };
+
+  const triggerAlert = (message, icon, color) => {
+    setAlert({message, icon, color}); // Set alert with dynamic message, icon, and color
+    setTimeout(() => {
+      setAlert(null); // Clear the alert after a few seconds
+    }, 3000); // Duration for the alert to disappear (3 seconds in this example)
   };
 
   // scrape meta-tags
   const scrapeMetaTags = async (e, input) => {
     e.preventDefault();
-    let inputValue = input.current.value;
 
+    // initiate loading
+    setAction("Loading");
+    
+    let inputValue = input.current.value;
     axios
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
-        const { title, icon, url } = response.data;
+        let { title, icon, url } = response.data;
+        // check if icon is a valid src if not convert it to a valid one
+        icon = !icon.includes("//" || "https") ? `${url}${icon}` : icon;
         let data = { title, icon, url };
+
+        // save data to database
         handleSaveToDB(data);
+
+        //stop loading message
+        setAction(false);
+        triggerAlert("New link has been added", "bi-check-lg", "bg-green-500")
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setAction(false)
+        triggerAlert("Couldn't get data.Try again", "bi-x-lg", "bg-red-500")
       });
   };
 
@@ -84,6 +114,8 @@ const useFunctions = () => {
   return {
     Link,
     link,
+    pushLinks,
+    triggerAlert,
     UploadImage,
     scrapeMetaTags,
     handlePushToSocials,
