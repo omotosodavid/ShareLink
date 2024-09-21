@@ -1,35 +1,14 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import useFunctions from "../../utils/useFunctions";
-import { collection, onSnapshot } from "firebase/firestore";
-import db from "../../partials/firebase";
-import NewLinks from "./newLink";
 import UseInput from "../../utils/useInput";
 
-const LinkGroups = ({ newlink, cancel }) => {
-  const [ogResult, setOGResult] = useState([]);
-  const [ogId, setOGId] = useState([]);
-  const [SocialPlatforms, setSocialPlatforms] = useState([]);
+const LinkGroups = ({ result, id }) => {
   const { handlePushToSocials, Link, link } = useFunctions();
   const { handleEditData, handleDeleteData, scrapeEditedMetaTags } = UseInput();
   const inputDisableRefs = useRef({});
   const saveButtonRefs = useRef({});
-
-  useEffect(() => {
-    onSnapshot(collection(db, "headScrape"), (snapshot) => {
-      let data = snapshot.docs.map((doc) => doc.data());
-      let id = snapshot.docs.map((doc) => doc.id);
-      setOGId(id);
-      setOGResult(data);
-    });
-    if (ogResult.length > 0) {
-      let social = [];
-      handlePushToSocials(ogResult, social);
-      if (JSON.stringify(SocialPlatforms) !== JSON.stringify(social)) {
-        setSocialPlatforms(social);
-      }
-    }
-  }, [ogResult, handlePushToSocials, SocialPlatforms]);
-
+  const SocialPlatforms = [];
+  handlePushToSocials(result, SocialPlatforms);
   return (
     <ol className="grid place-content-stretch gap-y-5 mt-6">
       {SocialPlatforms.map((SocialPlatform, index) => {
@@ -44,7 +23,7 @@ const LinkGroups = ({ newlink, cancel }) => {
               <section className="flex gap-x-4 items-center text-gray-400 text-lg font-medium">
                 <button
                   className="hover:text-gray-700"
-                  onClick={() => handleDeleteData(ogId, index)}
+                  onClick={() => handleDeleteData(id, index)}
                 >
                   Remove
                 </button>
@@ -79,7 +58,7 @@ const LinkGroups = ({ newlink, cancel }) => {
                   scrapeEditedMetaTags(
                     e,
                     inputDisableRefs.current[index],
-                    ogId,
+                    id,
                     index,
                     saveButtonRefs.current[index]
                   )
@@ -95,7 +74,7 @@ const LinkGroups = ({ newlink, cancel }) => {
                     id="links"
                     ref={(el) => (inputDisableRefs.current[index] = el)}
                     placeholder="Type in your url"
-                    value={link||url}
+                    value={link || url}
                     onChange={(e) => Link(e)}
                     disabled
                     required
@@ -113,7 +92,6 @@ const LinkGroups = ({ newlink, cancel }) => {
           </li>
         );
       })}
-      {newlink && <NewLinks cancel={cancel} />}
     </ol>
   );
 };

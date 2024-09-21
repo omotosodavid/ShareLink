@@ -1,34 +1,9 @@
-import { useEffect, useState } from "react";
-import useFunctions from "../../utils/useFunctions";
 import { Link } from "react-router-dom";
-import { collection, onSnapshot } from "firebase/firestore";
-import db from "../../partials/firebase";
-
-const PhoneLinks = () => {
-  const [platforms, setPlatforms] = useState([]);
-  const { getRandomColor } = useFunctions();
+import useFunctions from "../../utils/useFunctions";
+const PhoneLinks = ({ platforms }) => {
+  const { pushLinks } = useFunctions();
   const Links = [];
-
-  useEffect(() => {
-    onSnapshot(collection(db, "headScrape"), (snapshot) => {
-      let data = snapshot.docs.map((doc) => doc.data());
-      setPlatforms(data)
-    });
-  }, []);
-
-  const pushLinks = () => {
-    platforms.forEach((platform) => {
-    let newPlatform
-   !platform.result?newPlatform=platform:newPlatform=platform.result
-      Links.push({
-        name: newPlatform.title,
-        url: newPlatform.url,
-        icon: newPlatform.icon,
-        color: getRandomColor(),
-      });
-    });
-  };
-  pushLinks();
+  pushLinks(platforms, Links);
 
   return (
     <ul className="grid content-center gap-y-6">

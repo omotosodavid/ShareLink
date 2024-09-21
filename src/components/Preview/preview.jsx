@@ -1,5 +1,5 @@
 import { useCustomContext } from "../../utils/useCustomContext";
-import AlertClipboard from "./alertClipboard";
+import AlertMessage from "../../static/alertMessage";
 import PreviewDetails from "./preDetails";
 import PreviewNavbar from "./preNavBar";
 
@@ -9,7 +9,7 @@ const Preview = () => {
     <section>
       <PreviewNavbar />
       <PreviewDetails />
-      {alert && <AlertClipboard />}
+      {alert && <AlertMessage message={"Copied to Clipboard"} icon={"bi-check-lg"} color={"bg-green-500"} />}
     </section>
   );
 };
