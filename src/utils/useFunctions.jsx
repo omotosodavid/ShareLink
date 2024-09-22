@@ -7,7 +7,7 @@ import db from "../partials/firebase";
 const useFunctions = () => {
   const [link, setLink] = useState("");
   const [editLink,setEditLink]=useState([])
-  const { setImg, setAction,setAlert } = useCustomContext();
+  const { setImg, setLoading,setAlert } = useCustomContext();
 
   function handleLink(e) {
     setLink(e.target.value);
@@ -55,8 +55,7 @@ const useFunctions = () => {
     e.preventDefault();    
 
     // initiate loading
-    setAction("Loading");
-
+    setLoading(true);
     axios
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(link)}`)
       .then((response) => {
@@ -78,12 +77,12 @@ const useFunctions = () => {
         handleSaveToDB(data);
 
         //stop loading message
-        setAction(false);
+        setLoading(false);
         triggerAlert("New link has been added", "bi-check-lg", "bg-green-500")
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        setAction(false)
+        setLoading(false)
         triggerAlert("Couldn't get data.Try again", "bi-x-lg", "bg-red-500")
       });
   };

@@ -8,7 +8,7 @@ import { useCustomContext } from "../../utils/useCustomContext";
 const LinkFormat = ({ newlink, cancel }) => {
   const [ogResult, setOGResult] = useState([]);
   const [ogId, setOGId] = useState([]);
-  const { action } = useCustomContext();
+  const { loading } = useCustomContext();
   useEffect(() => {
     onSnapshot(collection(db, "headScrape"), (snapshot) => {
       let data = snapshot.docs.map((doc) => doc.data());
@@ -20,10 +20,10 @@ const LinkFormat = ({ newlink, cancel }) => {
 
   return (
     <>
-      {action && (
+      {loading && (
         <div className="text-xl text-gray-500 text-center font-medium">
           <i className="inline-block p-1 border-[3px] border-l-transparent mr-2 animate-spin border-gray-500 rounded-full"></i>
-          {action}
+          Loading
         </div>
       )}
       {ogResult.length ? (

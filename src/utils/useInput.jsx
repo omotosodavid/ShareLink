@@ -8,8 +8,8 @@ const UseInput = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const { triggerAlert} = useFunctions();
-  let { setAlert, img, setAction } = useCustomContext();
+  const { triggerAlert } = useFunctions();
+  let { setAlert, img } = useCustomContext();
 
   const handleInfoChange = async (e) => {
     e.preventDefault();
@@ -60,14 +60,16 @@ const UseInput = () => {
   };
   const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
     e.preventDefault();
-    // Intialize an action message
-    setAction("Editing");
 
     let inputValue = input.value;
 
     // reset input and save button
     input.disabled = true;
-    save.classList.add("hidden");
+    save.innerHTML = `
+      <div style="font-size: 1.25rem;line-height: 1.75rem;color:#fff;text-align: center;font-weight: 500;">
+        <i style="display: inline-block;padding: 0.25rem;border: 3px solid #fff;border-left-color: transparent;margin-right: 0.5rem;border-radius:50%" class="animate-spin"></i>
+        Editing
+      </div>`
     axios
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
@@ -78,16 +80,16 @@ const UseInput = () => {
           "/",
           url.indexOf("/", url.indexOf("/") + 1) + 1
         );
-        let revUrl =  thirdSlashIndex !== -1
-            ? url.slice(0, thirdSlashIndex)
-            : url
+        let revUrl =
+          thirdSlashIndex !== -1 ? url.slice(0, thirdSlashIndex) : url;
         // check if icon is a valid src if not convert it to a valid one
         icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
-        
+
         let payload = { title, icon, url };
 
         handleSaveEdit(docId, index, payload);
-        setAction(false);
+        save.classList.add("hidden");
+        save.innerText = "Save";
       })
       .catch(() => {
         triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
