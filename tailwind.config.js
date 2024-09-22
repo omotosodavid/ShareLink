@@ -2,6 +2,7 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx}"],
   safelist: [
+    "animate-spin",
     {
       pattern:
         /bg-(red|orange|yellow|green|teal|blue|indigo|purple|pink|gray)-(500|600|700|800)/,

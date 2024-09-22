@@ -81,7 +81,7 @@ const LinkGroups = ({ result, id }) => {
                   />
                 </section>
                 <button
-                  className="hidden py-2 px-6 bg-purple-500 text-white rounded-md w-24 mt-6 hover:bg-purple-400"
+                  className="hidden py-2 px-6 bg-purple-500 text-white rounded-md w-[9.3rem] mt-6 hover:bg-purple-400"
                   type="submit"
                   ref={(el) => (saveButtonRefs.current[index] = el)}
                 >
