@@ -8,7 +8,7 @@ const UseInput = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
-  const { triggerAlert } = useFunctions();
+  const { triggerAlert} = useFunctions();
   let { setAlert, img, setAction } = useCustomContext();
 
   const handleInfoChange = async (e) => {
@@ -54,8 +54,8 @@ const UseInput = () => {
       const docRef = doc(db, "headScrape", id);
       await setDoc(docRef, payload);
       triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
-    } catch {
-      triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
   const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
@@ -72,15 +72,25 @@ const UseInput = () => {
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
         let { title, icon, url } = response.data;
+        // if favicon is not accessible perform these action
+        // Reverting url to root url
+        let thirdSlashIndex = url.indexOf(
+          "/",
+          url.indexOf("/", url.indexOf("/") + 1) + 1
+        );
+        let revUrl =  thirdSlashIndex !== -1
+            ? url.slice(0, thirdSlashIndex)
+            : url
         // check if icon is a valid src if not convert it to a valid one
-        icon = !icon.includes("//" || "https") ? `${url}${icon}` : icon;
-        let payload = { title, icon, url };
+        icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
         
+        let payload = { title, icon, url };
+
         handleSaveEdit(docId, index, payload);
         setAction(false);
       })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+      .catch(() => {
+        triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
       });
   };
 

@@ -6,11 +6,18 @@ import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
+  const [editLink,setEditLink]=useState([])
   const { setImg, setAction,setAlert } = useCustomContext();
 
-  function Link(e) {
+  function handleLink(e) {
     setLink(e.target.value);
   }
+
+  const handleLinkChange = (e, index) => {
+    const newLink = [...editLink];
+    newLink[index] = e.target.value;
+    setEditLink(newLink);
+  };
 
   const pushLinks = (platforms, Links) => {
     platforms.forEach((platform) => {
@@ -44,19 +51,27 @@ const useFunctions = () => {
   };
 
   // scrape meta-tags
-  const scrapeMetaTags = async (e, input) => {
-    e.preventDefault();
+  const scrapeMetaTags = async (e) => {
+    e.preventDefault();    
 
     // initiate loading
     setAction("Loading");
-    
-    let inputValue = input.current.value;
+
     axios
-      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
+      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(link)}`)
       .then((response) => {
         let { title, icon, url } = response.data;
+        // if favicon is not accessible perform these action
+        // Reverting url to root url
+        let thirdSlashIndex = url.indexOf(
+          "/",
+          url.indexOf("/", url.indexOf("/") + 1) + 1
+        );
+        let revUrl =  thirdSlashIndex !== -1
+            ? url.slice(0, thirdSlashIndex)
+            : url
         // check if icon is a valid src if not convert it to a valid one
-        icon = !icon.includes("//" || "https") ? `${url}${icon}` : icon;
+        icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
         let data = { title, icon, url };
 
         // save data to database
@@ -112,8 +127,10 @@ const useFunctions = () => {
   }
 
   return {
-    Link,
+    handleLink,
     link,
+    handleLinkChange,
+    editLink,
     pushLinks,
     triggerAlert,
     UploadImage,
