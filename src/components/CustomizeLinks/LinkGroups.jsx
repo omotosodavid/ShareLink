@@ -3,7 +3,7 @@ import useFunctions from "../../utils/useFunctions";
 import UseInput from "../../utils/useInput";
 
 const LinkGroups = ({ result, id }) => {
-  const { handlePushToSocials, Link, link } = useFunctions();
+  const { handlePushToSocials, handleLinkChange,editLink } = useFunctions();
   const { handleEditData, handleDeleteData, scrapeEditedMetaTags } = UseInput();
   const inputDisableRefs = useRef({});
   const saveButtonRefs = useRef({});
@@ -74,8 +74,8 @@ const LinkGroups = ({ result, id }) => {
                     id="links"
                     ref={(el) => (inputDisableRefs.current[index] = el)}
                     placeholder="Type in your url"
-                    value={link || url}
-                    onChange={(e) => Link(e)}
+                    value={editLink[index] || url}
+                    onChange={(e) => handleLinkChange(e,index)}
                     disabled
                     required
                   />

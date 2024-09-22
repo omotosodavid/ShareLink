@@ -1,9 +1,7 @@
-import { useRef } from "react";
 import useFunctions from "../../utils/useFunctions";
 
 const NewLinks = ({ cancel }) => {
-  const input = useRef();
-  const { Link, link, scrapeMetaTags } = useFunctions();
+  const { handleLink, link, scrapeMetaTags } = useFunctions();
   return (
     <section className="bg-black/80 backdrop-blur-md w-screen h-screen flex items-center justify-center fixed top-0 left-0">
       <button
@@ -23,7 +21,7 @@ const NewLinks = ({ cancel }) => {
           <section className="grid gap-y-6 mt-6">
             <form
               onSubmit={(e) => {
-                scrapeMetaTags(e, input);
+                scrapeMetaTags(e);
                 cancel();
               }}
               className="grid gap-y-2 text-gray-600 text-lg font-medium"
@@ -38,8 +36,7 @@ const NewLinks = ({ cancel }) => {
                   id="link"
                   placeholder="Type in your url"
                   value={link}
-                  ref={input}
-                  onChange={(e) => Link(e)}
+                  onChange={(e) => handleLink(e)}
                   required
                 />
               </section>
