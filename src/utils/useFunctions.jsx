@@ -31,9 +31,13 @@ const useFunctions = () => {
     });
   };
   const handleSaveToDB = async (result) => {
+   try {
     const collectionRef = collection(db, "headScrape");
     const payload = { result };
     await addDoc(collectionRef, payload);
+   } catch{
+    triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500")
+   }
   };
 
   const handlePushToSocials = (datas, socials) => {

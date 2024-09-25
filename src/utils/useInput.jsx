@@ -54,8 +54,8 @@ const UseInput = () => {
       const docRef = doc(db, "headScrape", id);
       await setDoc(docRef, payload);
       triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    } catch {
+      triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500")
     }
   };
   const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
