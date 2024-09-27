@@ -1,13 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc, addDoc, collection } from "firebase/firestore";
 import db from "../partials/firebase";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
-  const [editLink,setEditLink]=useState([])
-  const { setImg, setLoading,setAlert } = useCustomContext();
+  // const [profileImg, setProfileImg] = useState("");
+  const [editLink, setEditLink] = useState([]);
+  const { setLoading, setAlert } = useCustomContext();
 
   function handleLink(e) {
     setLink(e.target.value);
@@ -31,13 +32,13 @@ const useFunctions = () => {
     });
   };
   const handleSaveToDB = async (result) => {
-   try {
-    const collectionRef = collection(db, "headScrape");
-    const payload = { result };
-    await addDoc(collectionRef, payload);
-   } catch{
-    triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500")
-   }
+    try {
+      const collectionRef = collection(db, "headScrape");
+      const payload = { result };
+      await addDoc(collectionRef, payload);
+    } catch {
+      triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500");
+    }
   };
 
   const handlePushToSocials = (datas, socials) => {
@@ -48,7 +49,7 @@ const useFunctions = () => {
   };
 
   const triggerAlert = (message, icon, color) => {
-    setAlert({message, icon, color}); // Set alert with dynamic message, icon, and color
+    setAlert({ message, icon, color }); // Set alert with dynamic message, icon, and color
     setTimeout(() => {
       setAlert(null); // Clear the alert after a few seconds
     }, 3000); // Duration for the alert to disappear (3 seconds in this example)
@@ -56,38 +57,48 @@ const useFunctions = () => {
 
   // scrape meta-tags
   const scrapeMetaTags = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();
 
     // initiate loading
     setLoading(true);
+
+    // modifying link incase user forgets to add http
+    const modifiedLink = link.includes("//") ? link : `https://${link}`;
+
     axios
-      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(link)}`)
+      .get(
+        `http://localhost:5000/scrape?url=${encodeURIComponent(modifiedLink)}`,
+        {}
+      )
       .then((response) => {
         let { title, icon, url } = response.data;
-        // if favicon is not accessible perform these action
-        // Reverting url to root url
+
+        // Handle favicon if the src is not a full URL
         let thirdSlashIndex = url.indexOf(
           "/",
           url.indexOf("/", url.indexOf("/") + 1) + 1
         );
-        let revUrl =  thirdSlashIndex !== -1
-            ? url.slice(0, thirdSlashIndex)
-            : url
-        // check if icon is a valid src if not convert it to a valid one
-        icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
+        let revUrl =
+          thirdSlashIndex !== -1 ? url.slice(0, thirdSlashIndex) : url;
+
+        // Fix icon if it's a relative path
+        icon = icon && !icon.includes("//") ? `${revUrl}${icon}` : icon;
+
         let data = { title, icon, url };
 
-        // save data to database
+        // Save data to the database
         handleSaveToDB(data);
 
-        //stop loading message
+        // Stop loading
         setLoading(false);
-        triggerAlert("New link has been added", "bi-check-lg", "bg-green-500")
+
+        // Trigger success alert
+        triggerAlert("New link has been added", "bi-check-lg", "bg-green-500");
       })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false)
-        triggerAlert("Couldn't get data.Try again", "bi-x-lg", "bg-red-500")
+      .catch(() => {
+        // Handle errors
+        setLoading(false);
+        triggerAlert("Couldn't get data. Try again", "bi-x-lg", "bg-red-500");
       });
   };
 
@@ -97,7 +108,7 @@ const useFunctions = () => {
     // adding an event listener for file loading
     reader.addEventListener("load", () => {
       img.src = reader.result;
-      setImg(reader.result);
+      handleProfileImage(img.src);
     });
     // reading the file content
     if (file) {
@@ -105,7 +116,18 @@ const useFunctions = () => {
     }
   };
 
-  function getRandomColor() {
+  // save img to database
+  const handleProfileImage = async (image) => {
+    const docRef = doc(db, "profileImg", "A8PiI5qAoQBNtUypWvHi");
+    try {
+      const payload = { image };
+      await setDoc(docRef, payload);
+    } catch (err) {
+      console.error("Error changing info", err);
+    }
+  };
+
+  const getRandomColor = () => {
     // Define possible colors and shade ranges (excluding white).
     const colors = [
       "red",
@@ -127,7 +149,7 @@ const useFunctions = () => {
 
     // Construct and return the Tailwind color class.
     return `bg-${randomColor}-${randomShade}`;
-  }
+  };
 
   return {
     handleLink,
