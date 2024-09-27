@@ -1,11 +1,14 @@
+import { useRef } from "react";
 import UseInput from "../../utils/useInput";
 import SaveButton from "./saveButton";
 
 const UserInfo = () => {
-  const { storeEmail, storeLastName, storeFirstName, handleInfoChange } =
-    UseInput();
+  const { storeEmail, storeLastName, storeFirstName, handleInfo } = UseInput();
+  const firstName=useRef()
+  const lastName=useRef()
+  const userEmail=useRef()
   return (
-    <form onSubmit={(e) => handleInfoChange(e)}>
+    <form onSubmit={(e) => handleInfo(e,firstName,lastName,userEmail)}>
       <section className="bg-gray-100 rounded-lg p-3 py-4 pb-5 w-full">
         <section className="grid gap-y-4">
           {/* Getting the user information */}
@@ -18,6 +21,7 @@ const UserInfo = () => {
               type="text"
               name="firstname"
               id="FirstName"
+              ref={firstName}
               placeholder="Enter your firstname"
               required
               onChange={(e) => storeFirstName(e)}
@@ -32,6 +36,7 @@ const UserInfo = () => {
               type="text"
               name="lastname"
               id="Lastname"
+              ref={lastName}
               placeholder="Enter your lastname"
               required
               onChange={(e) => storeLastName(e)}
@@ -45,6 +50,7 @@ const UserInfo = () => {
               className="py-2 w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
               type="email"
               id="Email"
+              ref={userEmail}
               placeholder="Enter your email address"
               required
               onChange={(e) => storeEmail(e)}

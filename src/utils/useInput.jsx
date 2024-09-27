@@ -5,24 +5,24 @@ import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 import useFunctions from "./useFunctions";
 const UseInput = () => {
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
+  let [firstname, setFirstname] = useState("");
+  let [lastname, setLastname] = useState("");
+  let [email, setEmail] = useState("");
   const { triggerAlert } = useFunctions();
-  let { setAlert, img } = useCustomContext();
+  let { setAlert } = useCustomContext();
 
-  const handleInfoChange = async (e) => {
+  const handleInfo = async (e, firstName, lastName, userEmail) => {
     e.preventDefault();
     const docRef = doc(db, "userinfo", "abDPHpjMDBHQMfPLt5H6");
     try {
-      if (img === "") {
-        img =
-          "https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw";
-      }
-      const payload = { firstname, lastname, email, img };
+      const payload = { firstname, lastname, email };
       await setDoc(docRef, payload);
-    } catch (err) {
-      console.error("Error changing info", err);
+      firstName.current.value = "";
+      lastName.current.value = "";
+      userEmail.current.value = "";
+      triggerAlert("User Information saved", "bi-check-lg", "bg-green-500");
+    } catch {
+      triggerAlert("Error saving userinfo", "bi-x-lg", "bg-red-500");
     }
   };
 
@@ -55,7 +55,7 @@ const UseInput = () => {
       await setDoc(docRef, payload);
       triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
     } catch {
-      triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500")
+      triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500");
     }
   };
   const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
@@ -69,7 +69,7 @@ const UseInput = () => {
       <div style="font-size: 1.25rem;line-height: 1.75rem;color:#fff;text-align: center;font-weight: 500;">
         <i style="display: inline-block;padding: 0.25rem;border: 3px solid #fff;border-left-color: transparent;margin-right: 0.5rem;border-radius:50%" class="animate-spin"></i>
         Editing
-      </div>`
+      </div>`;
     axios
       .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
@@ -92,6 +92,10 @@ const UseInput = () => {
         save.innerText = "Save";
       })
       .catch(() => {
+        // reset input and save button
+        input.disabled = true;
+        save.classList.add("hidden");
+        save.innerText = "Save";
         triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
       });
   };
@@ -150,7 +154,7 @@ const UseInput = () => {
   }
 
   return {
-    handleInfoChange,
+    handleInfo,
     handleEditData,
     handleDeleteData,
     scrapeEditedMetaTags,
