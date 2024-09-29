@@ -36,6 +36,8 @@ const useFunctions = () => {
       const collectionRef = collection(db, "headScrape");
       const payload = { result };
       await addDoc(collectionRef, payload);
+      // Trigger success alert
+      triggerAlert("New link has been added", "bi-check-lg", "bg-green-500");
     } catch {
       triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500");
     }
@@ -85,15 +87,13 @@ const useFunctions = () => {
         icon = icon && !icon.includes("//") ? `${revUrl}${icon}` : icon;
 
         let data = { title, icon, url };
-
+        
         // Save data to the database
         handleSaveToDB(data);
 
         // Stop loading
         setLoading(false);
 
-        // Trigger success alert
-        triggerAlert("New link has been added", "bi-check-lg", "bg-green-500");
       })
       .catch(() => {
         // Handle errors

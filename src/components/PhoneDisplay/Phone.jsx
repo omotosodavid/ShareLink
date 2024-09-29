@@ -9,7 +9,7 @@ const Phone = () => {
       </figure>
       <section className="absolute top-16 w-full">
        <DisplayProfile size={"h-36 w-36"}/>
-        <section className="mt-5 h-60 pb-1 px-5 overflow-y-auto scroll-hidden">
+        <section className="mt-5 h-60 pb-1 pl-4 pr-2 overflow-y-auto scroll-hidden w-[97%]">
           <PhoneLinkFormat/>
         </section>
       </section>

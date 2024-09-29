@@ -42,7 +42,7 @@ const DisplayProfile = ({ size }) => {
         <h3 className="font-bold mb-1">
           {info.firstname} {info.lastname}
         </h3>
-        <p className="w-[90%] left-4 pr-3 relative overflow-x-auto scroll-hidden overflow-x-auto:after">
+        <p className="w-[90%] left-4 pr-3 relative overflow-hidden">
           <span className="scroll-x-anime">{info.email}</span>
         </p>
       </section>
