@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import useFunctions from "../../utils/useFunctions";
 
 const NavLinks = () => {
   const activeLink = "bg-purple-100 text-purple-800";
@@ -6,10 +7,11 @@ const NavLinks = () => {
   const Linknavs = [
     { name: "Links", icon: "bi bi-link-45deg", link: "/" },
     { name: "Profile Details", icon: "bi bi-person-circle", link: "/profile" },
+    { name: "Preview", icon: "bi bi-eye-fill", link: "/preview" },
   ];
 
   return (
-    <ul className="flex w-72 items-center justify-between">
+    <ul className="flex w-96 items-center justify-between">
       {Linknavs.map((nav, index) => (
         <li className="text-lg" key={index}>
           <NavLink
@@ -29,23 +31,13 @@ const NavLinks = () => {
   );
 };
 
-const Preview = () => {
+const SignOut = () => {
+  const {handleSignOut}=useFunctions()
   return (
-    <button className="text-purple-700 text-lg font-medium border-purple-600 border-2 rounded-lg">
-      <NavLink
-        to="/preview"
-        className={({ isActive }) =>
-          `h-full py-2 block px-7 hover:bg-purple-600 hover:text-white duration-200 rounded-lg${
-            isActive
-              ? "bg-purple-600 text-white"
-              : "bg-transparent text-purple-700"
-          }`
-        }
-      >
-        Preview
-      </NavLink>
+    <button onClick={()=>handleSignOut()} className="text-purple-700 text-base font-medium border-purple-600 hover:bg-purple-600 hover:text-white duration-200 border-2 rounded-lg py-2 px-6">
+        Sign Out
     </button>
   );
 };
 
-export { NavLinks, Preview };
+export { NavLinks, SignOut };

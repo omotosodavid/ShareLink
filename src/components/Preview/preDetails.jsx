@@ -6,7 +6,7 @@ const PreviewDetails = () => {
       <section className="bg-white h-[32rem] overflow-hidden w-96 rounded-2xl mx-auto mb-8 grid gap-y-6">
       <div className="w-full p-10 pt-6 pb-4 h-full mx-auto scroll-hidden overflow-y-auto">
       <DisplayProfile size={"h-40 w-40"} />
-      <PhoneLinkFormat />
+      <PhoneLinkFormat textWidth={"w-56"}/>
       </div>
       </section>
     </section>

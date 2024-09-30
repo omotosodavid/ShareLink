@@ -3,10 +3,11 @@ import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
 import { doc, setDoc, addDoc, collection } from "firebase/firestore";
 import db from "../partials/firebase";
+import { signOut } from "supertokens-auth-react/recipe/session";
+import { redirectToAuth } from "supertokens-auth-react";
 
 const useFunctions = () => {
   const [link, setLink] = useState("");
-  // const [profileImg, setProfileImg] = useState("");
   const [editLink, setEditLink] = useState([]);
   const { setLoading, setAlert } = useCustomContext();
 
@@ -43,6 +44,11 @@ const useFunctions = () => {
     }
   };
 
+  const handleSignOut=async()=>{
+    await signOut();
+    redirectToAuth()
+  }
+
   const handlePushToSocials = (datas, socials) => {
     datas.forEach((data) => {
       let result = !data.result ? data : data.result;
@@ -66,10 +72,10 @@ const useFunctions = () => {
 
     // modifying link incase user forgets to add http
     const modifiedLink = link.includes("//") ? link : `https://${link}`;
-
+    
     axios
       .get(
-        `http://localhost:5000/scrape?url=${encodeURIComponent(modifiedLink)}`,
+        `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`,
         {}
       )
       .then((response) => {
@@ -84,12 +90,13 @@ const useFunctions = () => {
           thirdSlashIndex !== -1 ? url.slice(0, thirdSlashIndex) : url;
 
         // Fix icon if it's a relative path
-        icon = icon && !icon.includes("//") ? `${revUrl}${icon}` : icon;
+        icon =!icon.includes("//") ? `${revUrl}${icon}` : icon;
 
         let data = { title, icon, url };
+        console.log(data)
         
         // Save data to the database
-        handleSaveToDB(data);
+        // handleSaveToDB(data);
 
         // Stop loading
         setLoading(false);
@@ -156,6 +163,7 @@ const useFunctions = () => {
     link,
     handleLinkChange,
     editLink,
+    handleSignOut,
     pushLinks,
     triggerAlert,
     UploadImage,
