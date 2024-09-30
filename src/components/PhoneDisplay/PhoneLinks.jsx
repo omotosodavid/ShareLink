@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import useFunctions from "../../utils/useFunctions";
-const PhoneLinks = ({ platforms }) => {
+const PhoneLinks = ({ platforms,textWidth }) => {
   const { pushLinks } = useFunctions();
   const Links = [];
   pushLinks(platforms, Links);
@@ -20,7 +20,7 @@ const PhoneLinks = ({ platforms }) => {
                 src={link.icon}
                 alt={`${link.name} icon`}
               />
-              <p className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[160px]">
+              <p className={`whitespace-nowrap overflow-hidden text-ellipsis ${textWidth}`}>
                 {link.name}
               </p>
             </section>

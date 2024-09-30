@@ -1,4 +1,4 @@
-import { NavLinks, Preview } from "./NavLinks";
+import { NavLinks, SignOut } from "./NavLinks";
 
 const Navbar = () => {
   return (
@@ -12,7 +12,7 @@ const Navbar = () => {
       <nav>
         <NavLinks />
       </nav>
-      <Preview />
+      <SignOut />
     </header>
   );
 };
