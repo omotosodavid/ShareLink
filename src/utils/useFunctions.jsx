@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { doc, addDoc, collection,updateDoc } from "firebase/firestore";
+import { doc, addDoc, collection, updateDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 import { signOut } from "supertokens-auth-react/recipe/session";
 import { redirectToAuth } from "supertokens-auth-react";
@@ -44,10 +44,10 @@ const useFunctions = () => {
     }
   };
 
-  const handleSignOut=async()=>{
+  const handleSignOut = async () => {
     await signOut();
-    redirectToAuth()
-  }
+    redirectToAuth();
+  };
 
   const handlePushToSocials = (datas, socials) => {
     datas.forEach((data) => {
@@ -63,8 +63,8 @@ const useFunctions = () => {
     }, 3000); // Duration for the alert to disappear (3 seconds in this example)
   };
 
-   // save img to database
-   const handleProfileImage = async (image) => {
+  // save img to database
+  const handleProfileImage = async (image) => {
     const docRef = doc(db, "profileImg", "A8PiI5qAoQBNtUypWvHi");
     try {
       const payload = { image };
@@ -83,7 +83,7 @@ const useFunctions = () => {
 
     // modifying link incase user forgets to add http
     const modifiedLink = link.includes("//") ? link : `https://${link}`;
-    
+
     axios
       .get(
         `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`,
@@ -101,16 +101,15 @@ const useFunctions = () => {
           thirdSlashIndex !== -1 ? url.slice(0, thirdSlashIndex) : url;
 
         // Fix icon if it's a relative path
-        icon =!icon.includes("//") ? `${revUrl}${icon}` : icon;
+        icon = !icon.includes("//") ? `${revUrl}${icon}` : icon;
 
         let data = { title, icon, url };
-        
+
         // Save data to the database
         handleSaveToDB(data);
 
         // Stop loading
         setLoading(false);
-
       })
       .catch(() => {
         // Handle errors
@@ -132,7 +131,6 @@ const useFunctions = () => {
       reader.readAsDataURL(file);
     }
   };
-
 
   const getRandomColor = () => {
     // Define possible colors and shade ranges (excluding white).
