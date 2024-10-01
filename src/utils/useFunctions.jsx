@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { doc, addDoc, collection,updateDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 import { signOut } from "supertokens-auth-react/recipe/session";
 import { redirectToAuth } from "supertokens-auth-react";
@@ -63,6 +63,17 @@ const useFunctions = () => {
     }, 3000); // Duration for the alert to disappear (3 seconds in this example)
   };
 
+   // save img to database
+   const handleProfileImage = async (image) => {
+    const docRef = doc(db, "profileImg", "A8PiI5qAoQBNtUypWvHi");
+    try {
+      const payload = { image };
+      await updateDoc(docRef, payload);
+    } catch (err) {
+      console.error("Error changing info", err);
+    }
+  };
+
   // scrape meta-tags
   const scrapeMetaTags = async (e) => {
     e.preventDefault();
@@ -93,10 +104,9 @@ const useFunctions = () => {
         icon =!icon.includes("//") ? `${revUrl}${icon}` : icon;
 
         let data = { title, icon, url };
-        console.log(data)
         
         // Save data to the database
-        // handleSaveToDB(data);
+        handleSaveToDB(data);
 
         // Stop loading
         setLoading(false);
@@ -123,16 +133,6 @@ const useFunctions = () => {
     }
   };
 
-  // save img to database
-  const handleProfileImage = async (image) => {
-    const docRef = doc(db, "profileImg", "A8PiI5qAoQBNtUypWvHi");
-    try {
-      const payload = { image };
-      await setDoc(docRef, payload);
-    } catch (err) {
-      console.error("Error changing info", err);
-    }
-  };
 
   const getRandomColor = () => {
     // Define possible colors and shade ranges (excluding white).

@@ -4,7 +4,7 @@ import { CustomProvider } from "../utils/useCustomContext";
 
 const Main = () => {
   return (
-    <main className="w-[75em] mx-auto">
+    <main className="xl:w-[75em] xl:px-0 px-4 mx-auto">
       <CustomProvider>
         <Pages />
       </CustomProvider>

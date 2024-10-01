@@ -10,7 +10,7 @@ const LinkGroups = ({ result, id }) => {
   const SocialPlatforms = [];
   handlePushToSocials(result, SocialPlatforms);
   return (
-    <ol className="grid place-content-stretch gap-y-5 mt-6">
+    <ol className="grid place-content-stretch gap-y-5 mt-6 h-[36rem] overflow-y-auto scroll">
       {SocialPlatforms.map((SocialPlatform, index) => {
         const { title, url } = SocialPlatform;
         return (
