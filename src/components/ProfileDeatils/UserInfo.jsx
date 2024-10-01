@@ -12,12 +12,12 @@ const UserInfo = () => {
       <section className="bg-gray-100 rounded-lg p-3 py-4 pb-5 w-full">
         <section className="grid gap-y-4">
           {/* Getting the user information */}
-          <section className="flex items-center justify-between text-lg">
+          <section className="flex sm:flex-row flex-col gap-y-4 sm:items-center justify-between text-lg">
             <label className="text-gray-600" htmlFor="Firstname">
-              First name*
+              First name<span className="text-red-600">*</span>
             </label>
             <input
-              className="py-2 w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
+              className="py-2 sm:w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
               type="text"
               name="firstname"
               id="FirstName"
@@ -27,12 +27,12 @@ const UserInfo = () => {
               onChange={(e) => storeFirstName(e)}
             />
           </section>
-          <section className="flex items-center justify-between text-lg">
+          <section className="flex sm:flex-row flex-col gap-y-4 sm:items-center justify-between text-lg">
             <label className="text-gray-600" htmlFor="Lastname">
-              Last name*
+              Last name<span className="text-red-600">*</span>
             </label>
             <input
-              className="py-2 w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
+              className="py-2 sm:w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
               type="text"
               name="lastname"
               id="Lastname"
@@ -42,12 +42,12 @@ const UserInfo = () => {
               onChange={(e) => storeLastName(e)}
             />
           </section>
-          <section className="flex items-center justify-between text-lg">
+          <section className="flex sm:flex-row flex-col gap-y-4 sm:items-center justify-between text-lg">
             <label className="text-gray-600" htmlFor="Email">
-              Email*
+              Email<span className="text-red-600">*</span>
             </label>
             <input
-              className="py-2 w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
+              className="py-2 sm:w-96 px-4 rounded-lg shadow-md shadow-purple-300 border placeholder:text-sm focus:border-purple-500"
               type="email"
               id="Email"
               ref={userEmail}

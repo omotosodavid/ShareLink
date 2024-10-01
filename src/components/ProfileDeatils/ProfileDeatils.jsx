@@ -11,9 +11,9 @@ const ProfileDeatils = () => {
   return (
     <>
       <Navbar />
-      <section className="flex justify-between items-start">
+      <section className="flex flex-wrap xl:justify-between justify-center gap-y-8 items-start mb-6">
         <Phonedisplay />
-        <section className="w-[47rem] bg-white py-10 px-8 rounded-lg grid place-content-stretch gap-y-5">
+        <section className="md:w-[47rem] w-full bg-white sm:py-10 pt-5 pb-8 md:px-8 px-4 rounded-lg grid place-content-stretch gap-y-5">
           <ProfileIntro />
           <ProfilePicture />
           <UserInfo />

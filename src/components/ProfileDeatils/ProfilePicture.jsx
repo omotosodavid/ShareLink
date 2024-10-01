@@ -6,8 +6,8 @@ const ProfilePicture = () => {
   const { UploadImage } = useFunctions();
   return (
     <section className="bg-gray-100 rounded-lg p-3 py-4 w-full text-gray-600">
-      <section className="flex justify-between items-center">
-        <p className="text-lg">Profile image</p>
+      <section className="flex ms:justify-between justify-center items-center">
+        <p className="text-lg font-medium md:block hidden">Profile image</p>
         <section className="flex items-center gap-x-12">
           {/* Profile image */}
           <label
@@ -35,7 +35,7 @@ const ProfilePicture = () => {
               <section>Change Image</section>
             </section>
           </label>
-          <p className="w-48">
+          <p className="w-48 sm:block hidden">
             This section strictly for images{" "}
             <span className="text-red-500 font-medium">
               any other media wouldn't be accepted*.

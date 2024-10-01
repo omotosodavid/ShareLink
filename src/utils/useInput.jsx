@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { doc, setDoc, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import db from "../partials/firebase";
 import useFunctions from "./useFunctions";
 const UseInput = () => {
@@ -16,7 +16,7 @@ const UseInput = () => {
     const docRef = doc(db, "userinfo", "abDPHpjMDBHQMfPLt5H6");
     try {
       const payload = { firstname, lastname, email };
-      await setDoc(docRef, payload);
+      await updateDoc(docRef, payload);
       firstName.current.value = "";
       lastName.current.value = "";
       userEmail.current.value = "";
@@ -52,7 +52,7 @@ const UseInput = () => {
       let id = docId[index];
 
       const docRef = doc(db, "headScrape", id);
-      await setDoc(docRef, payload);
+      await updateDoc(docRef, payload);
       triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
     } catch {
       triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500");
@@ -153,6 +153,19 @@ const UseInput = () => {
       });
   }
 
+  const shareMobileLink = (title, text) => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: title,
+          text: text,
+          url: window.location.href,
+        })
+        .then(() => console.log("link shared successfully!"))
+        .catch((error) => console.log("Error sharing link:", error));
+    }
+  };
+
   return {
     handleInfo,
     handleEditData,
@@ -164,6 +177,7 @@ const UseInput = () => {
     shareLink,
     copyUrlToClipboard,
     alert,
+    shareMobileLink,
   };
 };
 

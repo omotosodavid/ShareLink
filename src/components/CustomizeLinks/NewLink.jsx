@@ -3,7 +3,7 @@ import useFunctions from "../../utils/useFunctions";
 const NewLinks = ({ cancel }) => {
   const { handleLink, link, scrapeMetaTags } = useFunctions();
   return (
-    <section className="bg-black/80 backdrop-blur-md w-screen h-screen flex items-center justify-center fixed top-0 left-0">
+    <section className="px-3 pr-7 bg-black/80 backdrop-blur-md w-screen h-screen flex items-center justify-center fixed top-0 left-0">
       <button
         title="Close"
         onClick={cancel}
@@ -11,7 +11,7 @@ const NewLinks = ({ cancel }) => {
       >
         <i className="bi bi-x-lg text-white text-2xl"></i>
       </button>
-      <section className="bg-white w-[30rem] p-4 rounded-lg">
+      <section className="bg-white sm:w-[30rem] w-full p-4 rounded-lg">
         <section className="bg-gray-200 w-full p-2 rounded-lg">
           <section className="flex items-center gap-x-1 text-gray-600 font-medium text-lg">
             <i className="bi bi-list"></i>
