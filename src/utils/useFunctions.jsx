@@ -82,12 +82,11 @@ const useFunctions = () => {
     setLoading(true);
 
     // modifying link incase user forgets to add http
-    const modifiedLink = link.includes("//") ? link : `https://${link}`;
+    const modifiedLink = link.includes("//") ? link : `http://${link}`;
 
     axios
       .get(
-        `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`,
-        {}
+        `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`
       )
       .then((response) => {
         let { title, icon, url } = response.data;

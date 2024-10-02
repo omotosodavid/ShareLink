@@ -12,7 +12,7 @@ import ThirdParty, {
   Apple,
 } from "supertokens-auth-react/recipe/thirdparty";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
-import Session,{SessionAuth} from "supertokens-auth-react/recipe/session";
+import Session, { SessionAuth } from "supertokens-auth-react/recipe/session";
 SuperTokens.init({
   appInfo: {
     // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
@@ -35,27 +35,35 @@ SuperTokens.init({
 
 const Pages = () => {
   return (
-   <SuperTokensWrapper>
-     <Router>
-      <Routes>
-        {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [
-          ThirdPartyPreBuiltUI,
-          EmailPasswordPreBuiltUI,
-        ])}
-       <Route exact path="/" element={
-        <SessionAuth>
-          <Customizelinks />
-        </SessionAuth>
-       } />
-       <Route exact path="/profile" element={
-        <SessionAuth>
-          <ProfileDeatils />
-        </SessionAuth>
-       } />
-        <Route exact path="/preview" Component={Preview} />
-      </Routes>
-    </Router>
-   </SuperTokensWrapper>
+    <SuperTokensWrapper>
+      <Router>
+        <Routes>
+          {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [
+            ThirdPartyPreBuiltUI,
+            EmailPasswordPreBuiltUI,
+          ])}
+          <Route
+            exact
+            path="/"
+            element={
+              <SessionAuth>
+                <Customizelinks />
+              </SessionAuth>
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              <SessionAuth>
+                <ProfileDeatils />
+              </SessionAuth>
+            }
+          />
+          <Route exact path="/preview" Component={Preview} />
+        </Routes>
+      </Router>
+    </SuperTokensWrapper>
   );
 };
 
