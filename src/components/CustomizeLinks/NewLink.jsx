@@ -3,7 +3,7 @@ import useFunctions from "../../utils/useFunctions";
 const NewLinks = ({ cancel }) => {
   const { handleLink, link, scrapeMetaTags } = useFunctions();
   return (
-    <section className="px-3 pr-7 bg-black/80 backdrop-blur-md w-screen h-screen flex items-center justify-center fixed top-0 left-0">
+    <section className="px-3 pr-7 bg-black/80 backdrop-blur-md w-screen h-screen flex items-center justify-center fixed z-30 top-0 left-0">
       <button
         title="Close"
         onClick={cancel}

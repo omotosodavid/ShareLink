@@ -3,7 +3,7 @@ import useFunctions from "../../utils/useFunctions";
 import UseInput from "../../utils/useInput";
 
 const LinkGroups = ({ result, id }) => {
-  const { handlePushToSocials, handleLinkChange,editLink } = useFunctions();
+  const { handlePushToSocials, handleLinkChange, editLink } = useFunctions();
   const { handleEditData, handleDeleteData, scrapeEditedMetaTags } = UseInput();
   const inputDisableRefs = useRef({});
   const saveButtonRefs = useRef({});
@@ -12,7 +12,7 @@ const LinkGroups = ({ result, id }) => {
   return (
     <ol className="grid place-content-stretch gap-y-5 mt-6 h-[36rem] overflow-y-auto scroll">
       {SocialPlatforms.map((SocialPlatform, index) => {
-        const { title, url } = SocialPlatform;
+        const { title, url, icon } = SocialPlatform;
         return (
           <li key={index} className="bg-gray-100 rounded-lg p-3">
             <section className="flex justify-between items-center">
@@ -43,14 +43,17 @@ const LinkGroups = ({ result, id }) => {
             <section className="grid gap-y-6 mt-6">
               <section className="grid gap-y-2 text-gray-600 text-lg font-medium">
                 <label htmlFor={`Social platform${index}`}>Platform</label>
+                <div className="relative">
+                  <img className="absolute rounded-full bottom-0 left-1 z-10" height="40" width="40" src={icon} alt="" />
                 <select
-                  className="w-full p-3 rounded-lg"
+                  className="w-full pl-14 p-3 rounded-lg"
                   name="social-platform"
                   id={`Social platform${index}`}
                   disabled
                 >
                   <option value={title}>{title}</option>
                 </select>
+                </div>
               </section>
               <form
                 className="grid gap-y-2 text-gray-600 text-lg font-medium"
@@ -75,7 +78,7 @@ const LinkGroups = ({ result, id }) => {
                     ref={(el) => (inputDisableRefs.current[index] = el)}
                     placeholder="Type in your url"
                     value={editLink[index] || url}
-                    onChange={(e) => handleLinkChange(e,index)}
+                    onChange={(e) => handleLinkChange(e, index)}
                     disabled
                     required
                   />

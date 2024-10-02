@@ -10,12 +10,13 @@ const LinkFormat = ({ newlink, cancel }) => {
   const [ogId, setOGId] = useState([]);
   const { loading } = useCustomContext();
   useEffect(() => {
-    onSnapshot(collection(db, "headScrape"), (snapshot) => {
-      let data = snapshot.docs.map((doc) => doc.data());
-      let id = snapshot.docs.map((doc) => doc.id);
-      setOGId(id);
+    const unsubscribe = onSnapshot(collection(db, "headScrape"), (snapshot) => {
+      const data = snapshot.docs.map((doc) => doc.data());
+      const ids = snapshot.docs.map((doc) => doc.id);
+      setOGId(ids);
       setOGResult(data);
     });
+    return () => unsubscribe();
   }, []);
 
   return (

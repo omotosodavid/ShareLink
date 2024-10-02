@@ -62,6 +62,7 @@ const UseInput = () => {
     e.preventDefault();
 
     let inputValue = input.value;
+    
 
     // reset input and save button
     input.disabled = true;
@@ -71,9 +72,10 @@ const UseInput = () => {
         Editing
       </div>`;
     axios
-      .get(`http://localhost:5000/scrape?url=${encodeURIComponent(inputValue)}`)
+      .get(`http://localhost:4000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
         let { title, icon, url } = response.data;
+        
         // if favicon is not accessible perform these action
         // Reverting url to root url
         let thirdSlashIndex = url.indexOf(
@@ -86,6 +88,7 @@ const UseInput = () => {
         icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
 
         let payload = { title, icon, url };
+        
 
         handleSaveEdit(docId, index, payload);
         save.classList.add("hidden");
