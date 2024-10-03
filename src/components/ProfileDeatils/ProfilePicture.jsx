@@ -6,7 +6,7 @@ const ProfilePicture = () => {
   const { UploadImage } = useFunctions();
   return (
     <section className="bg-gray-100 rounded-lg p-3 py-4 w-full text-gray-600">
-      <section className="flex ms:justify-between justify-center items-center">
+      <section className="flex md:justify-between justify-center items-center">
         <p className="text-lg font-medium md:block hidden">Profile image</p>
         <section className="flex items-center gap-x-12">
           {/* Profile image */}

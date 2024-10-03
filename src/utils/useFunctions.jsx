@@ -9,7 +9,7 @@ import { redirectToAuth } from "supertokens-auth-react";
 const useFunctions = () => {
   const [link, setLink] = useState("");
   const [editLink, setEditLink] = useState([]);
-  const { setLoading, setAlert } = useCustomContext();
+  const { setLoading, setAlert, profileImgId } = useCustomContext();
 
   function handleLink(e) {
     setLink(e.target.value);
@@ -23,7 +23,6 @@ const useFunctions = () => {
 
   const pushLinks = (platforms, Links) => {
     platforms.forEach((platform) => {
-      platform = !platform.result ? platform : platform.result;
       Links.push({
         name: platform.title,
         url: platform.url,
@@ -32,11 +31,13 @@ const useFunctions = () => {
       });
     });
   };
-  const handleSaveToDB = async (result) => {
+  const handleSaveToDB = async (payload) => {
     try {
-      const collectionRef = collection(db, "headScrape");
-      const payload = { result };
-      await addDoc(collectionRef, payload);
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return;
+      const userCollectionRef = doc(db, `user-${userId}`, "content");
+      const headScrapeRef = collection(userCollectionRef, "headScrape");
+      await addDoc(headScrapeRef, payload);
       // Trigger success alert
       triggerAlert("New link has been added", "bi-check-lg", "bg-green-500");
     } catch {
@@ -51,8 +52,7 @@ const useFunctions = () => {
 
   const handlePushToSocials = (datas, socials) => {
     datas.forEach((data) => {
-      let result = !data.result ? data : data.result;
-      socials.push(result);
+      socials.push(data);
     });
   };
 
@@ -65,12 +65,18 @@ const useFunctions = () => {
 
   // save img to database
   const handleProfileImage = async (image) => {
-    const docRef = doc(db, "profileImg", "A8PiI5qAoQBNtUypWvHi");
     try {
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return; // Ensure userId is available
+
+      const userCollectionRef = doc(db, `user-${userId}`, "content");
+      const profileImgRef = collection(userCollectionRef, "profileImg");
+      const docRef = doc(profileImgRef, profileImgId);
       const payload = { image };
       await updateDoc(docRef, payload);
-    } catch (err) {
-      console.error("Error changing info", err);
+      triggerAlert("Profile image saved", "bi-check-lg", "bg-green-500");
+    } catch  {
+      triggerAlert("Error saving image", "bi-x-lg", "bg-red-500");
     }
   };
 
@@ -87,6 +93,12 @@ const useFunctions = () => {
     axios
       .get(
         `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`
+        // {
+        //   withCredentials: true,
+        //   headers: {
+        //     "Access-Control-Allow-Origin": "http://localhost:3000",
+        //   },
+        // }
       )
       .then((response) => {
         let { title, icon, url } = response.data;

@@ -14,7 +14,7 @@ const LinkGroups = ({ result, id }) => {
       {SocialPlatforms.map((SocialPlatform, index) => {
         const { title, url, icon } = SocialPlatform;
         return (
-          <li key={index} className="bg-gray-100 rounded-lg p-3">
+          <li key={index} className="bg-gray-100 rounded-lg p-3 h-72">
             <section className="flex justify-between items-center">
               <section className="flex items-center gap-x-1 text-gray-600 font-medium text-lg">
                 <i className="bi bi-list"></i>
@@ -44,7 +44,7 @@ const LinkGroups = ({ result, id }) => {
               <section className="grid gap-y-2 text-gray-600 text-lg font-medium">
                 <label htmlFor={`Social platform${index}`}>Platform</label>
                 <div className="relative">
-                  <img className="absolute rounded-full bottom-0 left-1 z-10" height="40" width="40" src={icon} alt="" />
+                  <img className="absolute rounded-full bottom-0 left-1 z-10 w-10 h-10 object-cover" src={icon} alt="" />
                 <select
                   className="w-full pl-14 p-3 rounded-lg"
                   name="social-platform"

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useCustomContext } from "./useCustomContext";
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc, collection } from "firebase/firestore";
 import db from "../partials/firebase";
 import useFunctions from "./useFunctions";
 const UseInput = () => {
@@ -9,12 +9,17 @@ const UseInput = () => {
   let [lastname, setLastname] = useState("");
   let [email, setEmail] = useState("");
   const { triggerAlert } = useFunctions();
-  let { setAlert } = useCustomContext();
+  let { setAlert,userInfoId } = useCustomContext();
 
   const handleInfo = async (e, firstName, lastName, userEmail) => {
     e.preventDefault();
-    const docRef = doc(db, "userinfo", "abDPHpjMDBHQMfPLt5H6");
     try {
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return; // Ensure userId is available
+
+      const userCollectionRef = doc(db, `user-${userId}`, "content");
+      const userInfoRef = collection(userCollectionRef, "userInfo");
+      const docRef = doc(userInfoRef,userInfoId);
       const payload = { firstname, lastname, email };
       await updateDoc(docRef, payload);
       firstName.current.value = "";
@@ -34,11 +39,16 @@ const UseInput = () => {
 
   const handleDeleteData = async (docId, index) => {
     try {
-      // Get exact id
-      let id = docId[index];
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return; // Ensure userId is available
 
-      // Get a reference to the document
-      const docRef = doc(db, "headScrape", id);
+      // Get the user's headScrape sub-collection reference
+      const userCollectionRef = doc(db, `user-${userId}`, "content");
+      const headScrapeRef = collection(userCollectionRef, "headScrape");
+
+      // Get the exact document ID to delete
+      const id = docId[index];
+      const docRef = doc(headScrapeRef, id);
       await deleteDoc(docRef);
       triggerAlert("Link has been deleted", "bi-trash", "bg-red-500");
     } catch {
@@ -48,10 +58,16 @@ const UseInput = () => {
 
   const handleSaveEdit = async (docId, index, payload) => {
     try {
-      // Get exact id
-      let id = docId[index];
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) return; // Ensure userId is available
 
-      const docRef = doc(db, "headScrape", id);
+      // Get the user's headScrape sub-collection reference
+      const userCollectionRef = doc(db, `user-${userId}`, "content");
+      const headScrapeRef = collection(userCollectionRef, "headScrape");
+
+      // Get the exact document ID to delete
+      const id = docId[index];
+      const docRef = doc(headScrapeRef, id);
       await updateDoc(docRef, payload);
       triggerAlert("Link has been edited", "bi-pencil-square", "bg-blue-500");
     } catch {
@@ -62,7 +78,6 @@ const UseInput = () => {
     e.preventDefault();
 
     let inputValue = input.value;
-    
 
     // reset input and save button
     input.disabled = true;
@@ -75,7 +90,7 @@ const UseInput = () => {
       .get(`http://localhost:4000/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
         let { title, icon, url } = response.data;
-        
+
         // if favicon is not accessible perform these action
         // Reverting url to root url
         let thirdSlashIndex = url.indexOf(
@@ -88,7 +103,6 @@ const UseInput = () => {
         icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
 
         let payload = { title, icon, url };
-        
 
         handleSaveEdit(docId, index, payload);
         save.classList.add("hidden");
@@ -164,7 +178,7 @@ const UseInput = () => {
           text: text,
           url: window.location.href,
         })
-        .then(() => console.log("link shared successfully!"))
+        .then(() =>{return})
         .catch((error) => console.log("Error sharing link:", error));
     }
   };

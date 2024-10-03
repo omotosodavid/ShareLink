@@ -1,27 +1,42 @@
 import { useEffect, useState } from "react";
 import db from "../../partials/firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot,doc } from "firebase/firestore";
+import { useCustomContext } from "../../utils/useCustomContext";
 const DisplayProfile = ({ size }) => {
   const [info, setInfo] = useState({});
-  const [profileImage,setProfileImg]=useState({})
+  const [profileImage, setProfileImg] = useState("");
+  const {setProfileImgId,setUserInfoId}=useCustomContext()
   useEffect(() => {
-    const unsubscribeUserInfo = onSnapshot(collection(db, "userinfo"), (snapshot) => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) return; // Ensure userId is available
+
+    const userCollectionRef = doc(db, `user-${userId}`, "content");
+    const userInfoRef = collection(userCollectionRef, "userInfo");
+    const profileImgRef = collection(userCollectionRef, "profileImg");
+
+    // Listen for real-time updates to the headScrape collection
+    const unsubscribeUserInfo = onSnapshot(userInfoRef, (snapshot) => {
       let userInfoData = snapshot.docs.map((doc) => doc.data());
-      setInfo(userInfoData[0]); 
+      setUserInfoId(snapshot.docs.map((doc) => doc.id)[0]);
+      setInfo(userInfoData[0]);
     });
-  
-    const unsubscribeProfileImg = onSnapshot(collection(db, "profileImg"), (snapshot) => {
-      let profileImgData = snapshot.docs.map((doc) => doc.data());
-      setProfileImg(profileImgData[0]);
-    });
-  
+
+    const unsubscribeProfileImg = onSnapshot(
+      profileImgRef,
+      (snapshot) => {
+        let profileImgData = snapshot.docs.map((doc) => doc.data());
+        setProfileImgId(snapshot.docs.map((doc) => doc.id)[0]);
+        setProfileImg(profileImgData[0]);
+      }
+    );
+
     // Clean up the listeners when the component unmounts
     return () => {
       unsubscribeUserInfo();
       unsubscribeProfileImg();
     };
-  }, []);
-  
+  }, [setProfileImgId,setUserInfoId]);
+
   return (
     <>
       {/* Profile picture */}
