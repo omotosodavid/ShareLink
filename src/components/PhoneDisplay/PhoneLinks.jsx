@@ -16,7 +16,7 @@ const PhoneLinks = ({ platforms,textWidth }) => {
           >
             <section className="flex items-center gap-x-2 text-lg text-white font-medium">
               <img
-                className="w-6 h-6 rounded-full object-cover"
+                className="w-7 h-7 rounded-full object-cover"
                 src={link.icon}
                 alt={`${link.name} icon`}
               />

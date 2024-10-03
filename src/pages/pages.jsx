@@ -13,6 +13,8 @@ import ThirdParty, {
 } from "supertokens-auth-react/recipe/thirdparty";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import Session, { SessionAuth } from "supertokens-auth-react/recipe/session";
+import db from "../partials/firebase";
+import { addDoc, collection, doc } from "firebase/firestore";
 SuperTokens.init({
   appInfo: {
     // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
@@ -24,6 +26,48 @@ SuperTokens.init({
   },
   recipeList: [
     ThirdParty.init({
+      onHandleEvent: async (context) => {
+        if (context.action === "SUCCESS") {
+          const userId = context.user.id;
+          sessionStorage.setItem("userId", userId);
+          try {
+            if (
+              context.isNewRecipeUser &&
+              context.user.loginMethods.length === 1
+            ) {
+              // New user sign-up
+              const userCollection = doc(db, `user-${userId}`, "content");
+              const headScrapeCollection = collection(
+                userCollection,
+                "headScrape"
+              );
+              const userInfoCollection = collection(userCollection, "userInfo");
+              const profileImgCollection = collection(
+                userCollection,
+                "profileImg"
+              );
+              await addDoc(headScrapeCollection, {
+                icon: "https://static-00.iconduck.com/assets.00/smiling-face-with-sunglasses-emoji-2048x1908-ulnwowph.png",
+                title: "Welcome to ShareLinks",
+                url: "https://example.com",
+              });
+              await addDoc(userInfoCollection, {
+                email: "example.com",
+                firstname: "Jhon",
+                lastname: "Doe",
+              });
+              await addDoc(profileImgCollection, {
+                image: "",
+              });
+            } else {
+              // Existing user sign-in (optional logic)
+              console.log("Existing user:", userId);
+            }
+          } catch (error) {
+            console.log("Error creating user collection:", error);
+          }
+        }
+      },
       signInAndUpFeature: {
         providers: [Google.init(), Apple.init()],
       },
@@ -43,7 +87,6 @@ const Pages = () => {
             EmailPasswordPreBuiltUI,
           ])}
           <Route
-            exact
             path="/"
             element={
               <SessionAuth>
@@ -52,7 +95,6 @@ const Pages = () => {
             }
           />
           <Route
-            exact
             path="/profile"
             element={
               <SessionAuth>
@@ -60,7 +102,7 @@ const Pages = () => {
               </SessionAuth>
             }
           />
-          <Route exact path="/preview" Component={Preview} />
+          <Route path="/preview" element={<Preview />} />
         </Routes>
       </Router>
     </SuperTokensWrapper>

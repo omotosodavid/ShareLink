@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot,doc } from "firebase/firestore";
 import db from "../../partials/firebase";
 import NoPhoneLinks from "./NoPhoneLinks";
 import PhoneLinks from "./PhoneLinks";
@@ -7,7 +7,14 @@ import PhoneLinks from "./PhoneLinks";
 const PhoneLinkFormat = ({ textWidth }) => {
   const [platforms, setPlatforms] = useState([]);
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "headScrape"), (snapshot) => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) return; // Ensure userId is available
+
+    const userCollectionRef = doc(db, `user-${userId}`, "content");
+    const headScrapeRef = collection(userCollectionRef, "headScrape");
+
+    // Listen for real-time updates to the headScrape collection
+    const unsubscribe = onSnapshot(headScrapeRef, (snapshot) => {
       const data = snapshot.docs.map((doc) => doc.data());
       setPlatforms(data);
     });
