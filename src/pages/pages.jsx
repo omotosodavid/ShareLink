@@ -59,6 +59,7 @@ SuperTokens.init({
               await addDoc(profileImgCollection, {
                 image: "",
               });
+              window.location.reload();
             } else {
               // Existing user sign-in (optional logic)
               console.log("Existing user:", userId);
@@ -72,7 +73,51 @@ SuperTokens.init({
         providers: [Google.init(), Apple.init()],
       },
     }),
-    EmailPassword.init(),
+    EmailPassword.init({
+      onHandleEvent: async (context) => {
+        if (context.action === "SUCCESS") {
+          const userId = context.user.id;
+          sessionStorage.setItem("userId", userId);
+          try {
+            if (
+              context.isNewRecipeUser &&
+              context.user.loginMethods.length === 1
+            ) {
+              // New user sign-up
+              const userCollection = doc(db, `user-${userId}`, "content");
+              const headScrapeCollection = collection(
+                userCollection,
+                "headScrape"
+              );
+              const userInfoCollection = collection(userCollection, "userInfo");
+              const profileImgCollection = collection(
+                userCollection,
+                "profileImg"
+              );
+              await addDoc(headScrapeCollection, {
+                icon: "https://static-00.iconduck.com/assets.00/smiling-face-with-sunglasses-emoji-2048x1908-ulnwowph.png",
+                title: "Welcome to ShareLinks",
+                url: "https://example.com",
+              });
+              await addDoc(userInfoCollection, {
+                email: "example.com",
+                firstname: "Jhon",
+                lastname: "Doe",
+              });
+              await addDoc(profileImgCollection, {
+                image: "",
+              });
+              window.location.reload();
+            } else {
+              // Existing user sign-in (optional logic)
+              console.log("Existing user:", userId);
+            }
+          } catch (error) {
+            console.log("Error creating user collection:", error);
+          }
+        }
+      },
+    }),
     Session.init(),
   ],
 });
