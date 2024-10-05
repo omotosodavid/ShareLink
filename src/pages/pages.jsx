@@ -17,9 +17,8 @@ import db from "../partials/firebase";
 import { addDoc, collection, doc } from "firebase/firestore";
 SuperTokens.init({
   appInfo: {
-    // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
     appName: "sharelink",
-    apiDomain: "http://localhost:4000",
+    apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     websiteDomain: "http://localhost:3000",
     apiBasePath: "/auth",
     websiteBasePath: "/auth",
@@ -60,9 +59,6 @@ SuperTokens.init({
                 image: "",
               });
               window.location.reload();
-            } else {
-              // Existing user sign-in (optional logic)
-              console.log("Existing user:", userId);
             }
           } catch (error) {
             console.log("Error creating user collection:", error);
@@ -108,9 +104,6 @@ SuperTokens.init({
                 image: "",
               });
               window.location.reload();
-            } else {
-              // Existing user sign-in (optional logic)
-              console.log("Existing user:", userId);
             }
           } catch (error) {
             console.log("Error creating user collection:", error);

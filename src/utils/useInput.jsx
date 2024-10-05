@@ -74,6 +74,8 @@ const UseInput = () => {
       triggerAlert("Internal error:500", "bi-x-lg", "bg-red-500");
     }
   };
+
+  // scrape the edited link meta tags
   const scrapeEditedMetaTags = async (e, input, docId, index, save) => {
     e.preventDefault();
 
@@ -87,7 +89,7 @@ const UseInput = () => {
         Editing
       </div>`;
     axios
-      .get(`http://localhost:4000/scrape?url=${encodeURIComponent(inputValue)}`)
+      .get(`https://open-graph-and-auth-for-share-link.vercel.app/scrape?url=${encodeURIComponent(inputValue)}`)
       .then((response) => {
         let { title, icon, url } = response.data;
 
@@ -100,19 +102,19 @@ const UseInput = () => {
         let revUrl =
           thirdSlashIndex !== -1 ? url.slice(0, thirdSlashIndex) : url;
         // check if icon is a valid src if not convert it to a valid one
-        icon = !icon.includes("//" || "https") ? `${revUrl}${icon}` : icon;
+        icon = !icon.includes("//") ? `${revUrl}${icon}` : icon;
 
         let payload = { title, icon, url };
 
         handleSaveEdit(docId, index, payload);
         save.classList.add("hidden");
-        save.innerText = "Save";
+        save.textContent = "Save";
       })
       .catch(() => {
         // reset input and save button
         input.disabled = true;
         save.classList.add("hidden");
-        save.innerText = "Save";
+        save.textContent = "Save";
         triggerAlert("Error editing link", "bi-x-lg", "bg-red-500");
       });
   };

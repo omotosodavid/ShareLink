@@ -14,7 +14,7 @@ const LinkGroups = ({ result, id }) => {
       {SocialPlatforms.map((SocialPlatform, index) => {
         const { title, url, icon } = SocialPlatform;
         return (
-          <li key={index} className="bg-gray-100 rounded-lg p-3 h-72">
+          <li key={index} className="bg-gray-100 rounded-lg p-3">
             <section className="flex justify-between items-center">
               <section className="flex items-center gap-x-1 text-gray-600 font-medium text-lg">
                 <i className="bi bi-list"></i>

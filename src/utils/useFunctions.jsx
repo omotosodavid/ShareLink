@@ -75,7 +75,7 @@ const useFunctions = () => {
       const payload = { image };
       await updateDoc(docRef, payload);
       triggerAlert("Profile image saved", "bi-check-lg", "bg-green-500");
-    } catch  {
+    } catch {
       triggerAlert("Error saving image", "bi-x-lg", "bg-red-500");
     }
   };
@@ -92,13 +92,9 @@ const useFunctions = () => {
 
     axios
       .get(
-        `http://localhost:4000/scrape?url=${encodeURIComponent(modifiedLink)}`
-        // {
-        //   withCredentials: true,
-        //   headers: {
-        //     "Access-Control-Allow-Origin": "http://localhost:3000",
-        //   },
-        // }
+        `https://open-graph-and-auth-for-share-link.vercel.app/scrape?url=${encodeURIComponent(
+          modifiedLink
+        )}`
       )
       .then((response) => {
         let { title, icon, url } = response.data;
