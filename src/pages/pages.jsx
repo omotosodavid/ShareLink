@@ -21,7 +21,7 @@ SuperTokens.init({
     apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     websiteDomain: "https://sharelinks-one.vercel.app",
     apiBasePath: "/auth",
-    websiteBasePath: "/",
+    websiteBasePath: "/auth",
   },
   recipeList: [
     ThirdParty.init({
@@ -125,7 +125,7 @@ const Pages = () => {
             EmailPasswordPreBuiltUI,
           ])}
           <Route
-            path="/"
+            path="/home"
             element={
               <SessionAuth>
                 <Customizelinks />
