@@ -1,9 +1,9 @@
 import mobileNoData from "../../assets/NoLinkForMobile.jpg";
-const NoPhoneLinks = () => {
+const NoPhoneLinks = ({height}) => {
   return (
-    <div>
-      <img src={mobileNoData} alt="" />
-    </div>
+    <figure className={height}>
+      <img className={height} src={mobileNoData} alt="" />
+    </figure>
   );
 };
 

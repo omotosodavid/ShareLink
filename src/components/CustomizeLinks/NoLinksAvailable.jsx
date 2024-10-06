@@ -1,9 +1,9 @@
 import noLink from"../../assets/no link.jpg"
 const NoLinksAvailable=()=> {
   return (
-    <div>
+    <figure>
         <img src={noLink} alt="" />
-    </div>
+    </figure>
   )
 }
 

@@ -4,7 +4,7 @@ import db from "../../partials/firebase";
 import NoPhoneLinks from "./NoPhoneLinks";
 import PhoneLinks from "./PhoneLinks";
 
-const PhoneLinkFormat = ({ textWidth }) => {
+const PhoneLinkFormat = ({ textWidth,height }) => {
   const [platforms, setPlatforms] = useState([]);
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -25,7 +25,7 @@ const PhoneLinkFormat = ({ textWidth }) => {
       {platforms.length ? (
         <PhoneLinks platforms={platforms} textWidth={textWidth} />
       ) : (
-        <NoPhoneLinks />
+        <NoPhoneLinks height={height}/>
       )}
     </>
   );
