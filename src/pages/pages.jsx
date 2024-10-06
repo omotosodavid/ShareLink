@@ -21,7 +21,7 @@ SuperTokens.init({
     apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
     websiteDomain: "https://sharelinks-one.vercel.app",
     apiBasePath: "/auth",
-    websiteBasePath: "/auth",
+    websiteBasePath: "/",
   },
   recipeList: [
     ThirdParty.init({
