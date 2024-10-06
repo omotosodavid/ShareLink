@@ -125,7 +125,7 @@ const Pages = () => {
             EmailPasswordPreBuiltUI,
           ])}
           <Route
-            path="/home"
+            path="/"
             element={
               <SessionAuth>
                 <Customizelinks />
