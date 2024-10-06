@@ -7,7 +7,7 @@ const PreviewDetails = () => {
         <div className="w-full sm:px-10 px-4 pt-6 pb-4 h-full mx-auto scroll overflow-y-auto">
           <DisplayProfile size={"h-40 w-40"} />
           <br />
-          <PhoneLinkFormat textWidth={"w-56"} />
+          <PhoneLinkFormat textWidth={"w-56"} height={"h-auto"} />
         </div>
       </section>
     </section>

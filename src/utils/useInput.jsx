@@ -93,8 +93,12 @@ const UseInput = () => {
       .then((response) => {
         let { title, icon, url } = response.data;
 
-        // if favicon is not accessible perform these action
-        // Reverting url to root url
+        // If title is undefined display url
+        title=title===undefined?url:title
+        // If the icon is udefined, use a default icon
+        icon=icon===undefined?"https://static-00.iconduck.com/assets.00/globe-icon-512x512-jrx2ilx3.png":icon
+
+        // Handle favicon if the src is not a full URL
         let thirdSlashIndex = url.indexOf(
           "/",
           url.indexOf("/", url.indexOf("/") + 1) + 1
