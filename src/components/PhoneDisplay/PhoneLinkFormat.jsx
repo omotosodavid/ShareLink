@@ -4,13 +4,10 @@ import db from "../../partials/firebase";
 import NoPhoneLinks from "./NoPhoneLinks";
 import PhoneLinks from "./PhoneLinks";
 
-const PhoneLinkFormat = ({ textWidth,height }) => {
+const PhoneLinkFormat = ({ textWidth,height,Id }) => {
   const [platforms, setPlatforms] = useState([]);
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    if (!userId) return; // Ensure userId is available
-
-    const userCollectionRef = doc(db, `user-${userId}`, "content");
+    const userCollectionRef = doc(db, `user-${Id}`, "content");
     const headScrapeRef = collection(userCollectionRef, "headScrape");
 
     // Listen for real-time updates to the headScrape collection
@@ -19,7 +16,7 @@ const PhoneLinkFormat = ({ textWidth,height }) => {
       setPlatforms(data);
     });
     return () => unsubscribe();
-  }, []);
+  }, [Id]);
   return (
     <>
       {platforms.length ? (
