@@ -9,7 +9,6 @@ import * as reactRouterDom from "react-router-dom";
 import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react";
 import ThirdParty, {
   Google,
-  Apple,
 } from "supertokens-auth-react/recipe/thirdparty";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import Session, { SessionAuth } from "supertokens-auth-react/recipe/session";
@@ -66,7 +65,7 @@ SuperTokens.init({
         }
       },
       signInAndUpFeature: {
-        providers: [Google.init(), Apple.init()],
+        providers: [Google.init()],
       },
     }),
     EmailPassword.init({
