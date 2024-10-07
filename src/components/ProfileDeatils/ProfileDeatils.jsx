@@ -32,11 +32,12 @@ const ProfileDeatils = () => {
           content="Update or modify your profile information such as name, email, and profile picture on ShareLinks."
         />
         <meta property="og:type" content="website" />
-        {/* <meta property="og:image" content="" />
+        
         <meta
-          property="og:url"
-          content=""
-        /> */}
+          property="og:image"
+          content="https://sharelinks-one.vercel.app/src/assets/Sharelinks-logo.png"
+        />
+        <meta property="og:url" content="https://sharelinks-one.vercel.app/profile" />
         <meta property="og:locale" content="en_US" />
         <link rel="icon" href={logo} />
         <link rel="shortcut icon" href={logo} type="image/x-icon" />

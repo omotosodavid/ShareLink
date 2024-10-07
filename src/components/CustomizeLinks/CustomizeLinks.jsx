@@ -38,8 +38,11 @@ const Customizelinks = () => {
           content="Easily share and manage important links across multiple platforms with ShareLinks."
         />
         <meta property="og:type" content="website" />
-        {/* <meta property="og:image" content="" />
-  <meta property="og:url" content="" /> */}
+        <meta
+          property="og:image"
+          content="https://sharelinks-one.vercel.app/src/assets/Sharelinks-logo.png"
+        />
+        <meta property="og:url" content="https://sharelinks-one.vercel.app" />
         <meta property="og:locale" content="en_US" />
         <link rel="icon" href={logo} />
         <link rel="shortcut icon" href={logo} type="image/x-icon" />
