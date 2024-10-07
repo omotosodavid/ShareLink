@@ -7,20 +7,18 @@ import { ThirdPartyPreBuiltUI } from "supertokens-auth-react/recipe/thirdparty/p
 import { EmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/emailpassword/prebuiltui";
 import * as reactRouterDom from "react-router-dom";
 import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react";
-import ThirdParty, {
-  Google,
-} from "supertokens-auth-react/recipe/thirdparty";
+import ThirdParty, { Google } from "supertokens-auth-react/recipe/thirdparty";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import Session, { SessionAuth } from "supertokens-auth-react/recipe/session";
 import db from "../partials/firebase";
 import { addDoc, collection, doc } from "firebase/firestore";
 SuperTokens.init({
   appInfo: {
-    appName: "sharelink",
-    apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
-    websiteDomain: "https://sharelinks-one.vercel.app",
-    apiBasePath: "/auth",
-    websiteBasePath: "/auth",
+      appName: "sharelink",
+      apiDomain: "https://open-graph-and-auth-for-share-link.vercel.app",
+      websiteDomain: "https://sharelinks-one.vercel.app",
+      apiBasePath: "/auth",
+      websiteBasePath: "/auth",
   },
   recipeList: [
     ThirdParty.init({
@@ -139,7 +137,7 @@ const Pages = () => {
               </SessionAuth>
             }
           />
-          <Route path="/preview" element={<Preview />} />
+          <Route path="/preview/:id" element={<Preview />} />
         </Routes>
       </Router>
     </SuperTokensWrapper>
