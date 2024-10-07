@@ -40,7 +40,7 @@ const Customizelinks = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://sharelinks-one.vercel.app/src/assets/Sharelinks-logo.png"
+          content={logo}
         />
         <meta property="og:url" content="https://sharelinks-one.vercel.app" />
         <meta property="og:locale" content="en_US" />

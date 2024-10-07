@@ -31,7 +31,7 @@ const Preview = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://sharelinks-one.vercel.app/src/assets/Sharelinks-logo.png"
+          content={logo}
         />
         <meta property="og:locale" content="en_US" />
         <link rel="icon" href={logo} />
