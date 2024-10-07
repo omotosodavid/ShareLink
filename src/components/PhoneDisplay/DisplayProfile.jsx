@@ -2,15 +2,12 @@ import { useEffect, useState } from "react";
 import db from "../../partials/firebase";
 import { collection, onSnapshot, doc } from "firebase/firestore";
 import { useCustomContext } from "../../utils/useCustomContext";
-const DisplayProfile = ({ size }) => {
+const DisplayProfile = ({ Id,size }) => {
   const [info, setInfo] = useState({});
   const [profileImage, setProfileImg] = useState({});
   const { setProfileImgId, setUserInfoId } = useCustomContext();
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    if (!userId) return; // Ensure userId is available
-
-    const userCollectionRef = doc(db, `user-${userId}`, "content");
+    const userCollectionRef = doc(db, `user-${Id}`, "content");
     const userInfoRef = collection(userCollectionRef, "userInfo");
     const profileImgRef = collection(userCollectionRef, "profileImg");
 
@@ -32,7 +29,7 @@ const DisplayProfile = ({ size }) => {
       unsubscribeUserInfo();
       unsubscribeProfileImg();
     };
-  }, [setProfileImgId, setUserInfoId]);
+  }, [setProfileImgId, setUserInfoId,Id]);
   
 
   return (
