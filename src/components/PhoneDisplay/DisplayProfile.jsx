@@ -38,21 +38,27 @@ const DisplayProfile = ({ Id, size }) => {
           <img
             className={`${size} rounded-full border-2 border-purple-700 p-0.5 object-cover`}
             src={
-              profileImage.length||profileImage.image===undefined
-                ? ("https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw")
-                : (profileImage.image)
+              profileImage === "" || profileImage === undefined
+                ? "https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw"
+                : profileImage.image === ""
+                ? "https://imgs.search.brave.com/Tcf04M1nEL7smn0aI01rQ1Mq44QnU5NPmNRV_wuvEIc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzYz/LzM2MF9GXzY0Njc2/MzgzX0xkYm1oaU5N/NllwemIzRk00UFB1/RlA5ckhlN3JpOEp1/LmpwZw"
+                : profileImage.image
             }
-            alt="My profile picture"
+            alt="My avatar"
           />
         </figure>
       </section>
       {/* Profile info */}
       <section className="text-center text-lg">
         <h3 className="font-bold mb-1">
-          {info.length||info.firstname===undefined&&info.lastname===undefined?`Jhon Doe`:info.firstname+" "+info.lastname}
+          {info === "" || info === undefined
+            ? "John Doe"
+            : info.firstname + " " + info.lastname}
         </h3>
         <p className="w-[90%] left-4 pr-3 relative overflow-hidden">
-          <span className="scroll-x-anime">{info.email}</span>
+          <span className="scroll-x-anime">
+            {info === "" || info === undefined ? "example.com" : info.email}
+          </span>
         </p>
       </section>
     </>
