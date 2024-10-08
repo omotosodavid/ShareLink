@@ -5,7 +5,6 @@ import Preview from "../components/Preview/preview";
 import { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react/ui";
 import { ThirdPartyPreBuiltUI } from "supertokens-auth-react/recipe/thirdparty/prebuiltui";
 import { EmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/emailpassword/prebuiltui";
-import * as reactRouterDom from "react-router-dom";
 import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react";
 import ThirdParty, { Google } from "supertokens-auth-react/recipe/thirdparty";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
@@ -49,13 +48,12 @@ SuperTokens.init({
               });
               await addDoc(userInfoCollection, {
                 email: "example.com",
-                firstname: "Jhon",
+                firstname: "John",
                 lastname: "Doe",
               });
               await addDoc(profileImgCollection, {
                 image: "",
               });
-              window.location.reload()
             }
           } catch (error) {
             console.log("Error creating user collection:", error);
@@ -94,13 +92,12 @@ SuperTokens.init({
               });
               await addDoc(userInfoCollection, {
                 email: "example.com",
-                firstname: "Jhon",
+                firstname: "John",
                 lastname: "Doe",
               });
               await addDoc(profileImgCollection, {
                 image: "",
               });
-              window.location.reload()
             }
           } catch (error) {
             console.log("Error creating user collection:", error);
