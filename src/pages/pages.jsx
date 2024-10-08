@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Customizelinks from "../components/CustomizeLinks/CustomizeLinks";
 import ProfileDeatils from "../components/ProfileDeatils/ProfileDeatils";
 import Preview from "../components/Preview/preview";
+import * as reactRouterDom from "react-router-dom"
 import { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react/ui";
 import { ThirdPartyPreBuiltUI } from "supertokens-auth-react/recipe/thirdparty/prebuiltui";
 import { EmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/emailpassword/prebuiltui";
