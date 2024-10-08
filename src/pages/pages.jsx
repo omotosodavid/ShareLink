@@ -55,7 +55,6 @@ SuperTokens.init({
               await addDoc(profileImgCollection, {
                 image: "",
               });
-              window.location.reload();
             }
           } catch (error) {
             console.log("Error creating user collection:", error);
@@ -100,7 +99,6 @@ SuperTokens.init({
               await addDoc(profileImgCollection, {
                 image: "",
               });
-              window.location.reload();
             }
           } catch (error) {
             console.log("Error creating user collection:", error);
