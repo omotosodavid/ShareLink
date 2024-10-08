@@ -8,7 +8,7 @@ const NavLinks = () => {
   const Linknavs = [
     { name: "Links", icon: "bi bi-link-45deg", link: "/" },
     { name: "Profile Details", icon: "bi bi-person-circle", link: "/profile" },
-    { name: "Preview", icon: "bi bi-eye-fill", link: `/preview/${userId}` },
+    { name: "Preview", icon: "bi bi-play-fill", link: `/preview/${userId}` },
   ];
 
   return (
