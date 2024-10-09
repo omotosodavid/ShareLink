@@ -88,6 +88,8 @@ Go to your terminal and run the following guidelines:
 
 - **REST API:** Used for structured communication between the frontend and backend.
 
+- **Firebase (Firestore):** NoSQL cloud database for storing and syncing data in real-time across devices and users.
+
 ## Features
 
 - CRUD (Create, Read, Update, and Delete) features
